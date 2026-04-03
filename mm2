@@ -1,0 +1,472 @@
+local Redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/codeeditor069-ctrl/SV/refs/heads/main/SV%20GUI"))()
+
+local Window = Redzlib:MakeWindow({
+    Title = "SV HUB V2",
+    SubTitle = "by Velmorith and ShadowDev ",
+    SaveFolder = "SV "
+})
+
+Window:AddMinimizeButton({
+    Button = {Image = "rbxassetid://139625024983478", BackgroundTransparency = 0},
+    Corner = {CornerRadius = UDim.new(35, 1)}
+})
+
+local Tabs = {
+    Info = Window:MakeTab({"المعلومات", "info"}),
+    ESP = Window:MakeTab({"كشف اللاعبين", "eye"}),
+    Murder = Window:MakeTab({"قاتل او شرف", "sword"}),
+    Fun = Window:MakeTab({"المتعة", "sparkles"}),
+    Extra = Window:MakeTab({"اقوي الاشياء", "star"}),
+    Player = Window:MakeTab({"اللاعب", "user"}),
+    World = Window:MakeTab({"دقة الماب", "globe"}),
+    Camera = Window:MakeTab({"التحكم في الكاميرا", "camera"}),
+    UI = Window:MakeTab({"الواجهة", "settings"})
+}
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+
+Tabs.Info:AddSection({ "معلومات عامة" })
+Tabs.Info:AddParagraph({ "سكربت لماب MM2" })
+Tabs.Info:AddParagraph({ "اوامر و حجات جديد" })
+Tabs.Info:AddParagraph({"اقوي تعاون بتشوفه عينك بذا الماب"})
+Tabs.Info:AddSection({"حقوق"})
+Tabs.Info:AddParagraph({ "حقوق المطور Velmorith" })
+Tabs.Info:AddParagraph({ "حقوق المطور ShadowDev" })
+
+local ESPEnabled = false
+local ESPConnection
+
+local function ClearESP(player)
+    if player.Character then
+        if player.Character:FindFirstChild("ESP_Highlight") then player.Character.ESP_Highlight:Destroy() end
+        local head = player.Character:FindFirstChild("Head")
+        if head and head:FindFirstChild("ESP_Billboard") then head.ESP_Billboard:Destroy() end
+    end
+end
+
+local function AddESP(player, role)
+    if not ESPEnabled or player == LocalPlayer or not player.Character then return end
+    local head = player.Character:FindFirstChild("Head")
+    if not head then return end
+    ClearESP(player)
+    local highlight = Instance.new("Highlight", player.Character)
+    highlight.Name = "ESP_Highlight"
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.FillTransparency = 0.5
+    local billboard = Instance.new("BillboardGui", head)
+    billboard.Name = "ESP_Billboard"
+    billboard.Size = UDim2.new(0, 200, 0, 50)
+    billboard.AlwaysOnTop = true
+    local textLabel = Instance.new("TextLabel", billboard)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = player.DisplayName or player.Name
+    textLabel.Font = Enum.Font.GothamBold
+    textLabel.TextSize = 18
+    if role == "Murderer" then highlight.FillColor = Color3.fromRGB(255, 0, 0)
+    elseif role == "Sheriff" then highlight.FillColor = Color3.fromRGB(0, 0, 255)
+    else highlight.FillColor = Color3.fromRGB(0, 255, 0) end
+end
+
+local function UpdateESP()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character then
+            local bp = player:FindFirstChild("Backpack")
+            if (bp and bp:FindFirstChild("Knife")) or player.Character:FindFirstChild("Knife") then AddESP(player, "Murderer")
+            elseif (bp and bp:FindFirstChild("Gun")) or player.Character:FindFirstChild("Gun") then AddESP(player, "Sheriff")
+            else AddESP(player, "Innocent") end
+        end
+    end
+end
+
+Tabs.ESP:AddToggle({
+    Name = "كشف الكل",
+    Default = false,
+    Callback = function(Value)
+        ESPEnabled = Value
+        if Value then ESPConnection = RunService.RenderStepped:Connect(UpdateESP)
+        else if ESPConnection then ESPConnection:Disconnect() end
+            for _, player in pairs(Players:GetPlayers()) do ClearESP(player) end
+        end
+    end
+})
+
+Tabs.Murder:AddButton({
+    Name = "فتح وجهه تختار لكل لاعب يكون ايه",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/codeeditor069-ctrl/SV/refs/heads/main/Defining%20roles"))()
+    end
+})
+
+Tabs.Murder:AddButton({
+    Name = "قتل الكل",
+    Callback = function()
+        local Character = LocalPlayer.Character
+        local knife = LocalPlayer.Backpack:FindFirstChild("Knife") or Character:FindFirstChild("Knife")
+        if knife then
+            knife.Parent = Character
+            task.wait(0.2)
+            for _, target in pairs(Players:GetPlayers()) do
+                if target ~= LocalPlayer and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetHrp = target.Character.HumanoidRootPart
+                    local myHrp = Character:FindFirstChild("HumanoidRootPart")
+                    if myHrp then
+                        local startTime = tick()
+                        while tick() - startTime < 0.8 do
+                            if target.Character:FindFirstChild("Humanoid") and target.Character.Humanoid.Health > 0 then
+                                myHrp.CFrame = targetHrp.CFrame * CFrame.new(0, 0, 1)
+                                local parts = {"UpperTorso", "HumanoidRootPart"}
+                                for _, pName in ipairs(parts) do
+                                    local p = target.Character:FindFirstChild(pName)
+                                    if p then knife.Events.HandleTouched:FireServer(p) end
+                                end
+                            else break end
+                            task.wait()
+                        end
+                    end
+                end
+            end
+        end
+    end
+})
+
+Tabs.Fun:AddSection({"هنا معظم الاشياء الي ممكن تحتاجها حتا تمتع نفسك"})
+
+Tabs.Fun:AddButton({
+    Name = "محاوله اخذ السلاح",
+    Description = "يخلي الشريف يروح ل المردر و المردر يقتله و تاخذ انت السلاح",
+    Callback = function()
+        local function getRoles()
+            local roles = {Murd = nil, Sher = nil}
+            for _, p in pairs(Players:GetPlayers()) do
+                if p.Character then
+                    if p.Backpack:FindFirstChild("Knife") or p.Character:FindFirstChild("Knife") then
+                        roles.Murd = p
+                    elseif p.Backpack:FindFirstChild("Gun") or p.Character:FindFirstChild("Gun") then
+                        roles.Sher = p
+                    end
+                end
+            end
+            return roles
+        end
+
+        local function applyGod(state)
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("Humanoid") then
+                local hum = char.Humanoid
+                if state then
+                    hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+                    hum.Health = 0
+                    for _, p in pairs(char:GetDescendants()) do
+                        if p:IsA("BasePart") then p.CanTouch = false end
+                    end
+                else
+                    hum:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
+                    hum.Health = 100
+                    for _, p in pairs(char:GetDescendants()) do
+                        if p:IsA("BasePart") then p.CanTouch = true end
+                    end
+                end
+            end
+        end
+
+        task.spawn(function()
+            while task.wait() do
+                local r = getRoles()
+                if r.Sher and r.Murd and r.Sher.Character and r.Murd.Character then
+                    local sHrp = r.Sher.Character:FindFirstChild("HumanoidRootPart")
+                    local mHrp = r.Murd.Character:FindFirstChild("HumanoidRootPart")
+                    local mChar = r.Murd.Character
+                    if sHrp and mHrp then
+                        sHrp.CFrame = mHrp.CFrame * CFrame.new(0, 0, -1)
+                        if mChar:FindFirstChild("Knife") or r.Murd.Backpack:FindFirstChild("Knife") then
+                            local kn = mChar:FindFirstChild("Knife") or r.Murd.Backpack:FindFirstChild("Knife")
+                            kn.Parent = mChar
+                        end
+                    end
+                end
+                
+                local gunDrop = workspace:FindFirstChild("GunDrop")
+                if gunDrop and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local hrp = LocalPlayer.Character.HumanoidRootPart
+                    local oldPos = hrp.CFrame
+                    applyGod(true)
+                    local startTime = tick()
+                    while gunDrop.Parent == workspace and tick() - startTime < 3 do
+                        hrp.CFrame = gunDrop.CFrame
+                        firetouchinterest(hrp, gunDrop, 0)
+                        firetouchinterest(hrp, gunDrop, 1)
+                        task.wait()
+                    end
+                    hrp.CFrame = oldPos
+                    applyGod(false)
+                    break
+                end
+            end
+        end)
+    end
+})
+
+Tabs.Fun:AddButton({
+    Name = "خلي كل الاشخاص تظهر تحتيك يظهر مثل Tower",
+    Callback = function()
+        local function BuildTower()
+            local duration = 20
+            local startTime = tick()
+            local connection
+            connection = RunService.Heartbeat:Connect(function()
+                if tick() - startTime >= duration then
+                    connection:Disconnect()
+                    return
+                end
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local myHrp = LocalPlayer.Character.HumanoidRootPart
+                    local playersList = {}
+                    for _, p in pairs(Players:GetPlayers()) do
+                        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                            table.insert(playersList, p.Character.HumanoidRootPart)
+                        end
+                    end
+                    for i, targetHrp in ipairs(playersList) do
+                        targetHrp.Velocity = Vector3.new(0, 0, 0)
+                        targetHrp.CFrame = myHrp.CFrame * CFrame.new(0, -(i * 5), 0)
+                    end
+                end
+            end)
+        end
+        BuildTower()
+    end
+})
+
+Tabs.Extra:AddButton({
+    Name = "تصويب تلقائي للشريف",
+    Callback = function()
+        local function getMurderer()
+            for _, p in pairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character and (p.Backpack:FindFirstChild("Knife") or p.Character:FindFirstChild("Knife")) then
+                    return p
+                end
+            end
+            return nil
+        end
+        local OldIndex
+        OldIndex = hookmetamethod(game, "__index", function(Self, Index)
+            if Index == "Hit" and Self.Name == "Gun" then
+                local target = getMurderer()
+                if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                    return target.Character.HumanoidRootPart.CFrame
+                end
+            end
+            return OldIndex(Self, Index)
+        end)
+        RunService.Heartbeat:Connect(function()
+            local target = getMurderer()
+            local gun = LocalPlayer.Backpack:FindFirstChild("Gun") or LocalPlayer.Character:FindFirstChild("Gun")
+            if target and target.Character and target.Character.Humanoid.Health > 0 and gun then
+                local targetHrp = target.Character.HumanoidRootPart
+                local myHrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if myHrp then
+                    local args = {targetHrp.CFrame, myHrp.CFrame}
+                    if gun:FindFirstChild("Events") and gun.Events:FindFirstChild("Shoot") then
+                        gun.Events.Shoot:FireServer(unpack(args))
+                    end
+                    if target.Character.Humanoid.Health > 0 then
+                        myHrp.CFrame = targetHrp.CFrame * CFrame.new(0, 7, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                    end
+                end
+            end
+        end)
+    end
+})
+
+local GodModeConnection
+Tabs.Extra:AddToggle({
+    Name = "ما تموت ابدا",
+    Default = false,
+    Callback = function(v)
+        local Character = LocalPlayer.Character
+        local Hum = Character:WaitForChild("Humanoid")
+        if v then
+            Hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+            Hum.Health = 0
+            for _, part in pairs(Character:GetDescendants()) do
+                if part:IsA("BasePart") then part.CanTouch = false end
+            end
+            GodModeConnection = RunService.Heartbeat:Connect(function()
+                if Hum.Health > 0 then Hum.Health = 0 end
+                local mdr = nil
+                for _, p in pairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character and (p.Backpack:FindFirstChild("Knife") or p.Character:FindFirstChild("Knife")) then
+                        mdr = p
+                        break
+                    end
+                end
+                if mdr and mdr.Character and mdr.Character:FindFirstChild("HumanoidRootPart") then
+                    local mdrHrp = mdr.Character.HumanoidRootPart
+                    local myHrp = Character:FindFirstChild("HumanoidRootPart")
+                    if myHrp and (myHrp.Position - mdrHrp.Position).Magnitude < 8 then
+                        mdrHrp.Velocity = (mdrHrp.Position - myHrp.Position).Unit * 100 + Vector3.new(0, 50, 0)
+                    end
+                end
+            end)
+        else
+            if GodModeConnection then GodModeConnection:Disconnect() end
+            Hum:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
+            Hum.Health = 100
+            for _, part in pairs(Character:GetDescendants()) do
+                if part:IsA("BasePart") then part.CanTouch = true end
+            end
+        end
+    end
+})
+
+Tabs.Extra:AddToggle({
+    Name = "اختراق الجدران",
+    Default = false,
+    Callback = function(v)
+        local c
+        c = RunService.Stepped:Connect(function()
+            if not v then c:Disconnect() return end
+            if LocalPlayer.Character then
+                for _, p in pairs(LocalPlayer.Character:GetDescendants()) do
+                    if p:IsA("BasePart") then p.CanCollide = false end
+                end
+            end
+        end)
+    end
+})
+
+Tabs.Player:AddSlider({
+    Name = "سرعة المشي",
+    Min = 16, Max = 300, Default = 16,
+    Callback = function(v) LocalPlayer.Character.Humanoid.WalkSpeed = v end
+})
+
+Tabs.Player:AddSlider({
+    Name = "قوة القفز",
+    Min = 50, Max = 500, Default = 50,
+    Callback = function(v) LocalPlayer.Character.Humanoid.JumpPower = v end
+})
+
+Tabs.Player:AddSlider({
+    Name = "الجاذبية",
+    Min = 0, Max = 196, Default = 196,
+    Callback = function(v) workspace.Gravity = v end
+})
+
+Tabs.Player:AddButton({
+    Name = "توسيع الرؤيه ",
+    Callback = function() workspace.CurrentCamera.FieldOfView = 120 end
+})
+
+Tabs.Player:AddToggle({
+    Name = "قفزة لا نهائية",
+    Default = false,
+    Callback = function(v)
+        _G.InfJump = v
+        game:GetService("UserInputService").JumpRequest:Connect(function()
+            if _G.InfJump then LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") end
+        end)
+    end
+})
+
+Tabs.World:AddToggle({
+    Name = "تنوير الماب ",
+    Default = false,
+    Callback = function(v)
+        if v then Lighting.Ambient = Color3.fromRGB(255, 255, 255) Lighting.Brightness = 2
+        else Lighting.Ambient = Color3.fromRGB(127, 127, 127) Lighting.Brightness = 1 end
+    end
+})
+
+Tabs.World:AddButton({
+    Name = "حذف الضباب",
+    Callback = function()
+        Lighting.FogEnd = 999999
+        for _, v in pairs(Lighting:GetChildren()) do if v:IsA("Atmosphere") then v:Destroy() end end
+    end
+})
+
+Tabs.World:AddToggle({
+    Name = "رؤية ما وراء الجدران",
+    Default = false,
+    Callback = function(v)
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") and not obj.Parent:FindFirstChild("Humanoid") then
+                obj.LocalTransparencyModifier = v and 0.5 or 0
+            end
+        end
+    end
+})
+
+Tabs.World:AddToggle({
+    Name = "إخفاء الظلال",
+    Default = false,
+    Callback = function(v) Lighting.GlobalShadows = not v end
+})
+
+Tabs.World:AddButton({
+    Name = "وضع يخلي كل شي عندك ظلال",
+    Callback = function() Lighting.ClockTime = 0 end
+})
+
+Tabs.World:AddButton({
+    Name = "وضع يخلي كل شي يفتح عندك",
+    Callback = function() Lighting.ClockTime = 12 end
+})
+
+Tabs.World:AddButton({
+    Name = "تشغيل دقه HDR",
+    Callback = function()
+        local cc = Instance.new("ColorCorrectionEffect", Lighting)
+        cc.Saturation = 0.5
+        cc.Contrast = 0.1
+    end
+})
+
+Tabs.Camera:AddButton({
+    Name = " سكربت كاميرا حره ",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Freecam"))()
+    end
+})
+
+Tabs.Camera:AddSlider({
+    Name = "تقريب وابعاد الرؤية",
+    Min = 10, Max = 2000, Default = 70,
+    Callback = function(v) 
+        LocalPlayer.CameraMaxZoomDistance = v 
+    end
+})
+
+Tabs.Camera:AddButton({
+    Name = "منظور الشخص الاول",
+    Callback = function() 
+        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson 
+    end
+})
+
+Tabs.Camera:AddButton({
+    Name = "الوضع الافتراضي",
+    Callback = function() 
+        LocalPlayer.CameraMode = Enum.CameraMode.Classic
+        LocalPlayer.CameraMaxZoomDistance = 12.5
+        LocalPlayer.CameraMinZoomDistance = 0.5
+        workspace.CurrentCamera.FieldOfView = 70
+    end
+})
+
+Tabs.UI:AddSection({"إعدادات حجم السكربت"})
+Tabs.UI:Addsizedropdown() 
+Tabs.UI:AddSideDropdown()
+Tabs.UI:AddSection({"اشياء اضافيه"})
+Tabs.UI:AddButton({
+    Name = "إعادة تشغيل الواجهة",
+    Callback = function()
+        Redzlib:Destroy()
+    end
+})

@@ -1,0 +1,79 @@
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local ScreenGui = Instance.new("ScreenGui", CoreGui)
+
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 0, 0, 0)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.BackgroundTransparency = 0.3
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+local Corner = Instance.new("UICorner", MainFrame)
+Corner.CornerRadius = UDim.new(0, 20)
+
+local InnerImage = Instance.new("ImageLabel", MainFrame)
+InnerImage.Size = UDim2.new(1, 0, 1, 0)
+InnerImage.Image = "rbxassetid://139625024983478"
+InnerImage.BackgroundTransparency = 1
+InnerImage.ImageTransparency = 0.7
+InnerImage.ScaleType = Enum.ScaleType.Crop
+Instance.new("UICorner", InnerImage).CornerRadius = UDim.new(0, 20)
+
+local NeonStroke = Instance.new("UIStroke", MainFrame)
+NeonStroke.Thickness = 2.5
+NeonStroke.Color = Color3.fromRGB(255, 20, 147)
+NeonStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local UIGradient = Instance.new("UIGradient", NeonStroke)
+UIGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 20, 147)),
+    ColorSequenceKeypoint.new(0.4, Color3.fromRGB(40, 0, 20)),
+    ColorSequenceKeypoint.new(0.6, Color3.fromRGB(40, 0, 20)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 20, 147))
+})
+
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.Position = UDim2.new(0, 0, 0.15, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Select the language"
+Title.TextColor3 = Color3.fromRGB(255, 20, 147)
+Title.TextSize = 22
+Title.Font = Enum.Font.FredokaOne
+
+local function CreateBtn(name, pos, link)
+    local btn = Instance.new("TextButton", MainFrame)
+    btn.Size = UDim2.new(0, 150, 0, 45)
+    btn.Position = pos
+    btn.AnchorPoint = Vector2.new(0.5, 0.5)
+    btn.BackgroundColor3 = Color3.fromRGB(255, 20, 147)
+    btn.BackgroundTransparency = 0.8
+    btn.Text = name
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 18
+    btn.Font = Enum.Font.GothamBold
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 10)
+    Instance.new("UIStroke", btn).Color = Color3.fromRGB(255, 20, 147)
+    
+    btn.MouseButton1Click:Connect(function()
+        MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), "In", "Back", 0.6, true, function()
+            ScreenGui:Destroy()
+            loadstring(game:HttpGet(link))()
+        end)
+    end)
+    return btn
+end
+
+local EngBtn = CreateBtn("English", UDim2.new(0.3, 0, 0.7, 0), "https://raw.githubusercontent.com/codeeditor069-ctrl/SV/refs/heads/main/SV%20Hub2%20English")
+local ArbBtn = CreateBtn("العربية", UDim2.new(0.7, 0, 0.7, 0), "https://raw.githubusercontent.com/codeeditor069-ctrl/SV/refs/heads/main/SV%20Hub1%20Arabic")
+
+RunService.RenderStepped:Connect(function()
+    UIGradient.Rotation = (UIGradient.Rotation + 1.2) % 360
+end)
+
+MainFrame:TweenSize(UDim2.new(0, 450, 0, 250), "Out", "Back", 0.8, true)

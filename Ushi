@@ -2,9 +2,11 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 
 local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
 
 local USHINOU = {
     Theme = {
@@ -12,697 +14,820 @@ local USHINOU = {
         Accent = Color3.fromRGB(255, 0, 0),
         Text = Color3.fromRGB(255, 255, 255),
         SubText = Color3.fromRGB(200, 50, 50),
+        Stroke = Color3.fromRGB(255, 80, 80),
         Dark = Color3.fromRGB(30, 0, 0),
-        InActiveTab = Color3.fromRGB(180, 180, 180)
+        Glow = Color3.fromRGB(255, 80, 80)
     },
     Icons = {
-        home = "rbxassetid://10723407389",
+        check = "rbxassetid://10709790644",
+        arrow = "rbxassetid://10709791437",
+        close = "rbxassetid://10747384394",
+        minimize = "rbxassetid://10734896206",
+        search = "rbxassetid://10734943674",
+        copy = "rbxassetid://10709812159",
         settings = "rbxassetid://10734950309",
-        arrow = "rbxassetid://10709791437"
+        user = "rbxassetid://10747373176",
+        home = "rbxassetid://10723407389",
+        music = "rbxassetid://10734905958",
+        shield = "rbxassetid://10734951847",
+        menu = "rbxassetid://10734887784",
+        clock = "rbxassetid://10723404337",
+        heart = "rbxassetid://10723406885",
+        star = "rbxassetid://10734966248",
+        zap = "rbxassetid://10747383470",
+        target = "rbxassetid://10734977012",
+        key = "rbxassetid://10723416652",
+        lock = "rbxassetid://10723434711",
+        unlock = "rbxassetid://10747366027",
+        eye = "rbxassetid://10723346959",
+        eyeoff = "rbxassetid://10723346871",
+        edit = "rbxassetid://10734883598",
+        trash = "rbxassetid://10747362393",
+        save = "rbxassetid://10734941499",
+        download = "rbxassetid://10723344270",
+        upload = "rbxassetid://10747366434",
+        refresh = "rbxassetid://10734933056",
+        plus = "rbxassetid://10734924532",
+        minus = "rbxassetid://10734896206",
+        info = "rbxassetid://10723415903",
+        alert = "rbxassetid://10709753149",
+        bell = "rbxassetid://10709775704",
+        moon = "rbxassetid://10734897102",
+        sun = "rbxassetid://10734974297",
+        cloud = "rbxassetid://10709806740",
+        flame = "rbxassetid://10723376114",
+        snow = "rbxassetid://10734964600",
+        wind = "rbxassetid://10747382750",
+        droplet = "rbxassetid://10723344432",
+        thunder = "rbxassetid://10709805727",
+        activity = "rbxassetid://10709752035",
+        airplay = "rbxassetid://10709752254",
+        anchor = "rbxassetid://10709761530",
+        aperture = "rbxassetid://10709761813",
+        archive = "rbxassetid://10709762233",
+        atsign = "rbxassetid://10709769286",
+        award = "rbxassetid://10709769406",
+        barcode = "rbxassetid://10747360675",
+        battery = "rbxassetid://10709774640",
+        bluetooth = "rbxassetid://10709776655",
+        book = "rbxassetid://10709781824",
+        bookmark = "rbxassetid://10709782154",
+        box = "rbxassetid://10709782497",
+        briefcase = "rbxassetid://10709782662",
+        calendar = "rbxassetid://10709789505",
+        camera = "rbxassetid://10709789686",
+        car = "rbxassetid://10709789810",
+        cast = "rbxassetid://10709790097",
+        checkcircle = "rbxassetid://10709790387",
+        chevronleft = "rbxassetid://10709791281",
+        chevronright = "rbxassetid://10709791437",
+        chevronup = "rbxassetid://10709791523",
+        chevrondown = "rbxassetid://10709790948",
+        circle = "rbxassetid://10709798174",
+        clipboard = "rbxassetid://10709799288",
+        code = "rbxassetid://10709810463",
+        compass = "rbxassetid://10709811445",
+        copyleft = "rbxassetid://10709812251",
+        copyright = "rbxassetid://10709812311",
+        cpu = "rbxassetid://10709813383",
+        database = "rbxassetid://10709818996",
+        delete = "rbxassetid://10709819059",
+        disc = "rbxassetid://10723343537",
+        dollar = "rbxassetid://10723343958",
+        droplets = "rbxassetid://10734883356",
+        eject = "rbxassetid://10723345749",
+        ethernet = "rbxassetid://10723346372",
+        external = "rbxassetid://10723346684",
+        file = "rbxassetid://10723374641",
+        film = "rbxassetid://10723374981",
+        filter = "rbxassetid://10723375128",
+        flag = "rbxassetid://10723375890",
+        folder = "rbxassetid://10723387563",
+        gift = "rbxassetid://10723396402",
+        globe = "rbxassetid://10723404337",
+        grid = "rbxassetid://10723404936",
+        hash = "rbxassetid://10723405975",
+        headphones = "rbxassetid://10723406165",
+        image = "rbxassetid://10723415040",
+        inbox = "rbxassetid://10723415335",
+        joystick = "rbxassetid://10723416527",
+        laptop = "rbxassetid://10723423881",
+        layers = "rbxassetid://10723424505",
+        layout = "rbxassetid://10723425376",
+        link = "rbxassetid://10723426722",
+        list = "rbxassetid://10723433811",
+        loader = "rbxassetid://10723434070",
+        map = "rbxassetid://10734886202",
+        maximize = "rbxassetid://10734886735",
+        mic = "rbxassetid://10734888864",
+        monitor = "rbxassetid://10734896881",
+        moon2 = "rbxassetid://10734897102",
+        mouse = "rbxassetid://10734898592",
+        move = "rbxassetid://10734900011",
+        package = "rbxassetid://10734909540",
+        paperclip = "rbxassetid://10734910927",
+        phone = "rbxassetid://10734921524",
+        pie = "rbxassetid://10734921727",
+        play = "rbxassetid://10734923549",
+        power = "rbxassetid://10734930466",
+        printer = "rbxassetid://10734930632",
+        radio = "rbxassetid://10734931596",
+        scissors = "rbxassetid://10734942778",
+        send = "rbxassetid://10734943902",
+        server = "rbxassetid://10734949856",
+        share = "rbxassetid://10734950813",
+        shield2 = "rbxassetid://10734951847",
+        shopping = "rbxassetid://10734952479",
+        smartphone = "rbxassetid://10734963940",
+        speaker = "rbxassetid://10734965419",
+        tablet = "rbxassetid://10734976394",
+        tag = "rbxassetid://10734976528",
+        terminal = "rbxassetid://10734982144",
+        thermometer = "rbxassetid://10734983134",
+        tool = "rbxassetid://10734985247",
+        trash2 = "rbxassetid://10747362241",
+        tv = "rbxassetid://10747364593",
+        usb = "rbxassetid://10747366606",
+        video = "rbxassetid://10747374938",
+        voicmail = "rbxassetid://10747375281",
+        volume = "rbxassetid://10747376008",
+        wallet = "rbxassetid://10747376205",
+        watch = "rbxassetid://10747376722",
+        wifi = "rbxassetid://10747382504",
+        wrench = "rbxassetid://10747383470",
+        x = "rbxassetid://10747384394"
     }
 }
 
-local function CreateTween(inst, prop, val, time)
-    TweenService:Create(inst, TweenInfo.new(time or 0.3, Enum.EasingStyle.Quint), {[prop] = val}):Play()
+local function CreateTween(Instance, Prop, NewVal, Time, WaitEnd)
+    local Tween = TweenService:Create(Instance, TweenInfo.new(Time or 0.3, Enum.EasingStyle.Quint), {[Prop] = NewVal})
+    Tween:Play()
+    if WaitEnd then Tween.Completed:Wait() end
+    return Tween
 end
 
-local function MakeDrag(frame, handle)
-    local dragging, dragStart, startPos
-    handle.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStart = input.Position
-            startPos = frame.Position
+local function MakeDrag(Instance)
+    local Dragging, DragStart, StartPos = false, nil, nil
+    Instance.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            Dragging = true
+            DragStart = Input.Position
+            StartPos = Instance.Position
         end
     end)
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            local delta = input.Position - dragStart
-            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    UserInputService.InputChanged:Connect(function(Input)
+        if Dragging and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+            local Delta = Input.Position - DragStart
+            Instance.Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + Delta.X, StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y)
         end
     end)
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            Dragging = false
         end
     end)
 end
 
-local function AddMovingBorder(parent, thickness)
-    local stroke = Instance.new("UIStroke")
-    stroke.Parent = parent
-    stroke.Thickness = thickness or 2.5
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    local gradient = Instance.new("UIGradient")
-    gradient.Parent = stroke
-    gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 0, 0)),
+local function AddMovingBorder(Parent, Thickness, Speed)
+    local Stroke = Instance.new("UIStroke")
+    Stroke.Parent = Parent
+    Stroke.Thickness = Thickness or 1.5
+    Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    Stroke.LineJoinMode = Enum.LineJoinMode.Round
+    Stroke.Color = Color3.new(1, 1, 1)
+    local Gradient = Instance.new("UIGradient")
+    Gradient.Parent = Stroke
+    Gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, USHINOU.Theme.Dark),
         ColorSequenceKeypoint.new(0.5, USHINOU.Theme.Accent),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 0, 0))
+        ColorSequenceKeypoint.new(1, USHINOU.Theme.Dark)
     })
-    local rot = 0
-    RunService.RenderStepped:Connect(function(delta)
-        rot = rot + delta * 150
-        if rot >= 360 then rot = 0 end
-        gradient.Rotation = rot
+    local Rotation = 0
+    RunService.RenderStepped:Connect(function(Delta)
+        Rotation = Rotation + (Delta * (Speed or 80))
+        if Rotation >= 360 then Rotation = 0 end
+        Gradient.Rotation = Rotation
     end)
+    return Stroke
 end
 
-local function CreateParticles(mainFrame)
-    for i = 1, 15 do
-        local p = Instance.new("Frame")
-        p.Size = UDim2.new(0, 2, 0, 2)
-        p.BackgroundColor3 = USHINOU.Theme.Accent
-        p.BackgroundTransparency = 0.5
-        p.Position = UDim2.new(math.random(), 0, math.random(), 0)
-        p.Parent = mainFrame
-        p.ZIndex = 2
-        Instance.new("UICorner", p).CornerRadius = UDim.new(1, 0)
-        task.spawn(function()
-            while p.Parent do
-                local target = UDim2.new(math.random(), 0, math.random(), 0)
-                local t = TweenService:Create(p, TweenInfo.new(math.random(5,10), Enum.EasingStyle.Linear), {Position = target, BackgroundTransparency = 0.8})
-                t:Play()
-                t.Completed:Wait()
-                p.BackgroundTransparency = 0.5
-            end
-        end)
-    end
+local function CreateCorner(Parent, Radius)
+    local Corner = Instance.new("UICorner")
+    Corner.Parent = Parent
+    Corner.CornerRadius = Radius or UDim.new(0, 8)
+    return Corner
 end
 
-local function CreateCorner(parent, radius)
-    local c = Instance.new("UICorner")
-    c.Parent = parent
-    c.CornerRadius = radius or UDim.new(0, 8)
+local function CreateButtonElement(Parent, Config)
+    local Button = Instance.new("TextButton")
+    Button.Parent = Parent
+    Button.Size = Config.Size or UDim2.new(1, 0, 0, 35)
+    Button.BackgroundColor3 = USHINOU.Theme.Dark
+    Button.Text = Config.Text or ""
+    Button.Font = Enum.Font.GothamBold
+    Button.TextSize = Config.TextSize or 12
+    Button.TextColor3 = USHINOU.Theme.Text
+    Button.AutoButtonColor = false
+    Button.ClipsDescendants = true
+    CreateCorner(Button)
+    AddMovingBorder(Button, 1.2)
+    Button.MouseEnter:Connect(function()
+        CreateTween(Button, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.3)
+    end)
+    Button.MouseLeave:Connect(function()
+        CreateTween(Button, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
+    end)
+    return Button
 end
 
-local function CreateButtonElement(parent, config)
-    local btn = Instance.new("TextButton")
-    btn.Parent = parent
-    btn.Size = config.Size or UDim2.new(1, 0, 0, 35)
-    btn.BackgroundColor3 = USHINOU.Theme.Dark
-    btn.Text = config.Text or ""
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = config.TextSize or 12
-    btn.TextColor3 = USHINOU.Theme.Text
-    btn.AutoButtonColor = false
-    CreateCorner(btn)
-    AddMovingBorder(btn, 1.2)
-    btn.MouseEnter:Connect(function() CreateTween(btn, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.3) end)
-    btn.MouseLeave:Connect(function() CreateTween(btn, "BackgroundColor3", USHINOU.Theme.Dark, 0.3) end)
-    return btn
-end
-
-local function CreateToggle(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 32)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
-
-    local label = Instance.new("TextLabel")
-    label.Parent = frame
-    label.Size = UDim2.new(1, -60, 1, 0)
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Toggle"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local switchHolder = Instance.new("Frame")
-    switchHolder.Parent = frame
-    switchHolder.Size = UDim2.new(0, 35, 0, 18)
-    switchHolder.Position = UDim2.new(1, -42, 0.5, 0)
-    switchHolder.AnchorPoint = Vector2.new(0, 0.5)
-    switchHolder.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
-    CreateCorner(switchHolder, UDim.new(0.5, 0))
-
-    local switch = Instance.new("Frame")
-    switch.Parent = switchHolder
-    switch.Size = UDim2.new(0, 12, 0, 12)
-    switch.Position = UDim2.new(0, 2, 0.5, 0)
-    switch.AnchorPoint = Vector2.new(0, 0.5)
-    switch.BackgroundColor3 = Color3.new(1, 1, 1)
-    CreateCorner(switch, UDim.new(0.5, 0))
-
-    local active = config.Default or false
-    local callback = config.Callback or function() end
-
-    local function setToggle(value)
-        active = value
-        callback(active)
-        if active then
-            CreateTween(switch, "Position", UDim2.new(1, -14, 0.5, 0), 0.25)
-            CreateTween(switchHolder, "BackgroundColor3", USHINOU.Theme.Accent, 0.25)
+local function CreateToggle(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 32)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(1, -60, 1, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Toggle"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local SwitchHolder = Instance.new("Frame")
+    SwitchHolder.Parent = Frame
+    SwitchHolder.Size = UDim2.new(0, 35, 0, 18)
+    SwitchHolder.Position = UDim2.new(1, -42, 0.5, 0)
+    SwitchHolder.AnchorPoint = Vector2.new(0, 0.5)
+    SwitchHolder.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
+    CreateCorner(SwitchHolder, UDim.new(0.5, 0))
+    local Switch = Instance.new("Frame")
+    Switch.Parent = SwitchHolder
+    Switch.Size = UDim2.new(0, 12, 0, 12)
+    Switch.Position = UDim2.new(0, 2, 0.5, 0)
+    Switch.AnchorPoint = Vector2.new(0, 0.5)
+    Switch.BackgroundColor3 = Color3.new(1, 1, 1)
+    CreateCorner(Switch, UDim.new(0.5, 0))
+    local Active = Config.Default or false
+    local Callback = Config.Callback or function() end
+    local function SetToggle(Value)
+        Active = Value
+        Callback(Active)
+        if Active then
+            CreateTween(Switch, "Position", UDim2.new(1, -14, 0.5, 0), 0.25)
+            CreateTween(SwitchHolder, "BackgroundColor3", USHINOU.Theme.Accent, 0.25)
         else
-            CreateTween(switch, "Position", UDim2.new(0, 2, 0.5, 0), 0.25)
-            CreateTween(switchHolder, "BackgroundColor3", Color3.fromRGB(100, 0, 0), 0.25)
+            CreateTween(Switch, "Position", UDim2.new(0, 2, 0.5, 0), 0.25)
+            CreateTween(SwitchHolder, "BackgroundColor3", Color3.fromRGB(100, 0, 0), 0.25)
         end
     end
-
-    local clickArea = Instance.new("TextButton")
-    clickArea.Parent = frame
-    clickArea.Size = UDim2.new(1, 0, 1, 0)
-    clickArea.BackgroundTransparency = 1
-    clickArea.Text = ""
-    clickArea.ZIndex = 10
-    clickArea.MouseButton1Click:Connect(function() setToggle(not active) end)
-
-    if active then setToggle(true) end
-
+    local ClickArea = Instance.new("TextButton")
+    ClickArea.Parent = Frame
+    ClickArea.Size = UDim2.new(1, 0, 1, 0)
+    ClickArea.BackgroundTransparency = 1
+    ClickArea.Text = ""
+    ClickArea.ZIndex = 10
+    ClickArea.MouseButton1Click:Connect(function()
+        SetToggle(not Active)
+    end)
+    if Active then SetToggle(true) end
     return {
-        Set = setToggle,
-        Get = function() return active end,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Set = SetToggle,
+        Get = function() return Active end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateSlider(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 45)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
-
-    local label = Instance.new("TextLabel")
-    label.Parent = frame
-    label.Size = UDim2.new(1, -60, 0, 20)
-    label.Position = UDim2.new(0, 10, 0, 5)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Slider"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local valueLabel = Instance.new("TextLabel")
-    valueLabel.Parent = frame
-    valueLabel.Size = UDim2.new(0, 40, 0, 20)
-    valueLabel.Position = UDim2.new(1, -50, 0, 5)
-    valueLabel.BackgroundTransparency = 1
-    valueLabel.Text = tostring(config.Default or config.Min or 0)
-    valueLabel.TextColor3 = USHINOU.Theme.Accent
-    valueLabel.Font = Enum.Font.GothamBold
-    valueLabel.TextSize = 11
-
-    local sliderBar = Instance.new("Frame")
-    sliderBar.Parent = frame
-    sliderBar.Size = UDim2.new(1, -20, 0, 6)
-    sliderBar.Position = UDim2.new(0, 10, 0, 30)
-    sliderBar.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
-    CreateCorner(sliderBar, UDim.new(0.5, 0))
-
-    local fill = Instance.new("Frame")
-    fill.Parent = sliderBar
-    fill.Size = UDim2.new(0.5, 0, 1, 0)
-    fill.BackgroundColor3 = USHINOU.Theme.Accent
-    CreateCorner(fill, UDim.new(0.5, 0))
-
-    local knob = Instance.new("Frame")
-    knob.Parent = sliderBar
-    knob.Size = UDim2.new(0, 14, 0, 14)
-    knob.Position = UDim2.new(0.5, 0, 0.5, 0)
-    knob.AnchorPoint = Vector2.new(0.5, 0.5)
-    knob.BackgroundColor3 = Color3.new(1, 1, 1)
-    knob.ZIndex = 3
-    CreateCorner(knob, UDim.new(0.5, 0))
-
-    local min = config.Min or 0
-    local max = config.Max or 100
-    local default = config.Default or min
-    local callback = config.Callback or function() end
-    local dragging = false
-
-    local function updateValue(input)
-        local pos = math.clamp((input.Position.X - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X, 0, 1)
-        local value = math.floor(min + (pos * (max - min)))
-        valueLabel.Text = tostring(value)
-        fill.Size = UDim2.new(pos, 0, 1, 0)
-        knob.Position = UDim2.new(pos, 0, 0.5, 0)
-        callback(value)
+local function CreateSlider(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 45)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(1, -60, 0, 20)
+    Label.Position = UDim2.new(0, 10, 0, 5)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Slider"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local ValueLabel = Instance.new("TextLabel")
+    ValueLabel.Parent = Frame
+    ValueLabel.Size = UDim2.new(0, 40, 0, 20)
+    ValueLabel.Position = UDim2.new(1, -50, 0, 5)
+    ValueLabel.BackgroundTransparency = 1
+    ValueLabel.Text = tostring(Config.Default or Config.Min or 0)
+    ValueLabel.TextColor3 = USHINOU.Theme.Accent
+    ValueLabel.Font = Enum.Font.GothamBold
+    ValueLabel.TextSize = 11
+    local SliderBar = Instance.new("Frame")
+    SliderBar.Parent = Frame
+    SliderBar.Size = UDim2.new(1, -20, 0, 6)
+    SliderBar.Position = UDim2.new(0, 10, 0, 30)
+    SliderBar.BackgroundColor3 = Color3.fromRGB(50, 0, 0)
+    SliderBar.BorderSizePixel = 0
+    CreateCorner(SliderBar, UDim.new(0.5, 0))
+    local Fill = Instance.new("Frame")
+    Fill.Parent = SliderBar
+    Fill.Size = UDim2.new(0.5, 0, 1, 0)
+    Fill.BackgroundColor3 = USHINOU.Theme.Accent
+    Fill.BorderSizePixel = 0
+    CreateCorner(Fill, UDim.new(0.5, 0))
+    local Knob = Instance.new("Frame")
+    Knob.Parent = SliderBar
+    Knob.Size = UDim2.new(0, 14, 0, 14)
+    Knob.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Knob.AnchorPoint = Vector2.new(0.5, 0.5)
+    Knob.BackgroundColor3 = Color3.new(1, 1, 1)
+    Knob.ZIndex = 3
+    CreateCorner(Knob, UDim.new(0.5, 0))
+    local Min = Config.Min or 0
+    local Max = Config.Max or 100
+    local Default = Config.Default or Min
+    local Callback = Config.Callback or function() end
+    local Dragging = false
+    local function UpdateValue(Input)
+        local Pos = math.clamp((Input.Position.X - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X, 0, 1)
+        local Value = math.floor(Min + (Pos * (Max - Min)))
+        ValueLabel.Text = tostring(Value)
+        Fill.Size = UDim2.new(Pos, 0, 1, 0)
+        Knob.Position = UDim2.new(Pos, 0, 0.5, 0)
+        Callback(Value)
     end
-
-    knob.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+    Knob.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = true
+        end
     end)
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then updateValue(input) end
+    UserInputService.InputChanged:Connect(function(Input)
+        if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then
+            UpdateValue(Input)
+        end
     end)
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+    UserInputService.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Dragging = false
+        end
     end)
-    sliderBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then updateValue(input) dragging = true end
+    SliderBar.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            UpdateValue(Input)
+            Dragging = true
+        end
     end)
-
-    local initialPos = (default - min) / (max - min)
-    fill.Size = UDim2.new(initialPos, 0, 1, 0)
-    knob.Position = UDim2.new(initialPos, 0, 0.5, 0)
-    valueLabel.Text = tostring(default)
-
+    local InitialPos = (Default - Min) / (Max - Min)
+    Fill.Size = UDim2.new(InitialPos, 0, 1, 0)
+    Knob.Position = UDim2.new(InitialPos, 0, 0.5, 0)
+    ValueLabel.Text = tostring(Default)
     return {
-        Set = function(value)
-            local pos = math.clamp((value - min) / (max - min), 0, 1)
-            fill.Size = UDim2.new(pos, 0, 1, 0)
-            knob.Position = UDim2.new(pos, 0, 0.5, 0)
-            valueLabel.Text = tostring(value)
-            callback(value)
+        Frame = Frame,
+        Set = function(Value)
+            local Pos = (Value - Min) / (Max - Min)
+            Fill.Size = UDim2.new(Pos, 0, 1, 0)
+            Knob.Position = UDim2.new(Pos, 0, 0.5, 0)
+            ValueLabel.Text = tostring(Value)
+            Callback(Value)
         end,
-        Destroy = function() frame:Destroy() end
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateDropdown(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 35)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    frame.ClipsDescendants = true
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
-
-    local button = Instance.new("TextButton")
-    button.Parent = frame
-    button.Size = UDim2.new(1, 0, 0, 35)
-    button.BackgroundTransparency = 1
-    button.Text = ""
-
-    local label = Instance.new("TextLabel")
-    label.Parent = button
-    label.Size = UDim2.new(1, -40, 1, 0)
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Dropdown"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local selectedLabel = Instance.new("TextLabel")
-    selectedLabel.Parent = button
-    selectedLabel.Size = UDim2.new(0, 100, 1, 0)
-    selectedLabel.Position = UDim2.new(1, -110, 0, 0)
-    selectedLabel.BackgroundTransparency = 1
-    selectedLabel.Text = "..."
-    selectedLabel.TextColor3 = USHINOU.Theme.SubText
-    selectedLabel.Font = Enum.Font.GothamBold
-    selectedLabel.TextSize = 10
-    selectedLabel.TextXAlignment = Enum.TextXAlignment.Right
-
-    local arrow = Instance.new("ImageLabel")
-    arrow.Parent = button
-    arrow.Size = UDim2.new(0, 15, 0, 15)
-    arrow.Position = UDim2.new(1, -20, 0.5, 0)
-    arrow.AnchorPoint = Vector2.new(0, 0.5)
-    arrow.BackgroundTransparency = 1
-    arrow.Image = USHINOU.Icons.arrow
-    arrow.Rotation = 90
-
-    local optionsFrame = Instance.new("Frame")
-    optionsFrame.Parent = frame
-    optionsFrame.Size = UDim2.new(1, 0, 0, 0)
-    optionsFrame.Position = UDim2.new(0, 0, 0, 35)
-    optionsFrame.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
-    optionsFrame.Visible = false
-    CreateCorner(optionsFrame)
-
-    local scroll = Instance.new("ScrollingFrame")
-    scroll.Parent = optionsFrame
-    scroll.Size = UDim2.new(1, 0, 1, 0)
-    scroll.BackgroundTransparency = 1
-    scroll.ScrollBarThickness = 4
-    scroll.ScrollBarImageColor3 = USHINOU.Theme.Accent
-    scroll.CanvasSize = UDim2.new()
-
-    local layout = Instance.new("UIListLayout")
-    layout.Parent = scroll
-    layout.Padding = UDim.new(0, 2)
-
-    local options = config.Options or {}
-    local selected = config.Default
-    local callback = config.Callback or function() end
-    local open = false
-
-    local function selectOption(option)
-        selected = option
-        selectedLabel.Text = tostring(option)
-        callback(option)
-        CreateTween(frame, "Size", UDim2.new(1, 0, 0, 35), 0.3)
-        CreateTween(arrow, "Rotation", 90, 0.3)
-        open = false
-        task.delay(0.3, function() optionsFrame.Visible = false end)
+local function CreateDropdown(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 35)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    Frame.ClipsDescendants = true
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Button = Instance.new("TextButton")
+    Button.Parent = Frame
+    Button.Size = UDim2.new(1, 0, 0, 35)
+    Button.BackgroundTransparency = 1
+    Button.Text = ""
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Button
+    Label.Size = UDim2.new(1, -40, 1, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Dropdown"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local SelectedLabel = Instance.new("TextLabel")
+    SelectedLabel.Parent = Button
+    SelectedLabel.Size = UDim2.new(0, 100, 1, 0)
+    SelectedLabel.Position = UDim2.new(1, -110, 0, 0)
+    SelectedLabel.BackgroundTransparency = 1
+    SelectedLabel.Text = "..."
+    SelectedLabel.TextColor3 = USHINOU.Theme.SubText
+    SelectedLabel.Font = Enum.Font.GothamBold
+    SelectedLabel.TextSize = 10
+    SelectedLabel.TextXAlignment = Enum.TextXAlignment.Right
+    local Arrow = Instance.new("ImageLabel")
+    Arrow.Parent = Button
+    Arrow.Size = UDim2.new(0, 15, 0, 15)
+    Arrow.Position = UDim2.new(1, -20, 0.5, 0)
+    Arrow.AnchorPoint = Vector2.new(0, 0.5)
+    Arrow.BackgroundTransparency = 1
+    Arrow.Image = USHINOU.Icons.arrow
+    Arrow.Rotation = 90
+    local OptionsFrame = Instance.new("Frame")
+    OptionsFrame.Parent = Frame
+    OptionsFrame.Size = UDim2.new(1, 0, 0, 0)
+    OptionsFrame.Position = UDim2.new(0, 0, 0, 35)
+    OptionsFrame.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+    OptionsFrame.BorderSizePixel = 0
+    OptionsFrame.Visible = false
+    CreateCorner(OptionsFrame)
+    local Scroll = Instance.new("ScrollingFrame")
+    Scroll.Parent = OptionsFrame
+    Scroll.Size = UDim2.new(1, 0, 1, 0)
+    Scroll.BackgroundTransparency = 1
+    Scroll.ScrollBarThickness = 4
+    Scroll.ScrollBarImageColor3 = USHINOU.Theme.Accent
+    Scroll.CanvasSize = UDim2.new()
+    local Layout = Instance.new("UIListLayout")
+    Layout.Parent = Scroll
+    Layout.Padding = UDim.new(0, 2)
+    local Options = Config.Options or {}
+    local Selected = Config.Default or nil
+    local Callback = Config.Callback or function() end
+    local Open = false
+    local function SelectOption(Option)
+        Selected = Option
+        SelectedLabel.Text = tostring(Option)
+        Callback(Option)
+        CreateTween(Frame, "Size", UDim2.new(1, 0, 0, 35), 0.3)
+        CreateTween(Arrow, "Rotation", 90, 0.3)
+        Open = false
+        task.delay(0.3, function() OptionsFrame.Visible = false end)
     end
-
-    for _, opt in ipairs(options) do
-        local optBtn = Instance.new("TextButton")
-        optBtn.Parent = scroll
-        optBtn.Size = UDim2.new(1, 0, 0, 28)
-        optBtn.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
-        optBtn.Text = tostring(opt)
-        optBtn.Font = Enum.Font.GothamBold
-        optBtn.TextSize = 11
-        optBtn.TextColor3 = USHINOU.Theme.Text
-        CreateCorner(optBtn, UDim.new(0, 6))
-        optBtn.MouseButton1Click:Connect(function() selectOption(opt) end)
-        optBtn.MouseEnter:Connect(function() CreateTween(optBtn, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.2) end)
-        optBtn.MouseLeave:Connect(function() CreateTween(optBtn, "BackgroundColor3", Color3.fromRGB(30, 0, 0), 0.2) end)
+    for _, Option in ipairs(Options) do
+        local OptBtn = Instance.new("TextButton")
+        OptBtn.Parent = Scroll
+        OptBtn.Size = UDim2.new(1, 0, 0, 28)
+        OptBtn.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
+        OptBtn.Text = tostring(Option)
+        OptBtn.Font = Enum.Font.GothamBold
+        OptBtn.TextSize = 11
+        OptBtn.TextColor3 = USHINOU.Theme.Text
+        CreateCorner(OptBtn, UDim.new(0, 6))
+        OptBtn.MouseButton1Click:Connect(function()
+            SelectOption(Option)
+        end)
+        OptBtn.MouseEnter:Connect(function()
+            CreateTween(OptBtn, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.2)
+        end)
+        OptBtn.MouseLeave:Connect(function()
+            CreateTween(OptBtn, "BackgroundColor3", Color3.fromRGB(30, 0, 0), 0.2)
+        end)
     end
-
-    scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
-
-    button.MouseButton1Click:Connect(function()
-        open = not open
-        if open then
-            optionsFrame.Visible = true
-            CreateTween(frame, "Size", UDim2.new(1, 0, 0, 35 + math.min(150, layout.AbsoluteContentSize.Y + 10)), 0.3)
-            CreateTween(arrow, "Rotation", 0, 0.3)
+    Scroll.CanvasSize = UDim2.new(0, 0, 0, Layout.AbsoluteContentSize.Y + 10)
+    Button.MouseButton1Click:Connect(function()
+        Open = not Open
+        if Open then
+            OptionsFrame.Visible = true
+            CreateTween(Frame, "Size", UDim2.new(1, 0, 0, 35 + math.min(150, Layout.AbsoluteContentSize.Y + 10)), 0.3)
+            CreateTween(Arrow, "Rotation", 0, 0.3)
         else
-            CreateTween(frame, "Size", UDim2.new(1, 0, 0, 35), 0.3)
-            CreateTween(arrow, "Rotation", 90, 0.3)
-            task.delay(0.3, function() optionsFrame.Visible = false end)
+            CreateTween(Frame, "Size", UDim2.new(1, 0, 0, 35), 0.3)
+            CreateTween(Arrow, "Rotation", 90, 0.3)
+            task.delay(0.3, function() OptionsFrame.Visible = false end)
         end
     end)
-
-    if selected then selectOption(selected) end
-
+    if Selected then SelectOption(Selected) end
     return {
-        Set = selectOption,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Set = SelectOption,
+        Add = function(Option)
+            local OptBtn = Instance.new("TextButton")
+            OptBtn.Parent = Scroll
+            OptBtn.Size = UDim2.new(1, 0, 0, 28)
+            OptBtn.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
+            OptBtn.Text = tostring(Option)
+            OptBtn.Font = Enum.Font.GothamBold
+            OptBtn.TextSize = 11
+            OptBtn.TextColor3 = USHINOU.Theme.Text
+            CreateCorner(OptBtn, UDim.new(0, 6))
+            OptBtn.MouseButton1Click:Connect(function()
+                SelectOption(Option)
+            end)
+            Scroll.CanvasSize = UDim2.new(0, 0, 0, Layout.AbsoluteContentSize.Y + 10)
+        end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateTextBox(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 35)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
-
-    local label = Instance.new("TextLabel")
-    label.Parent = frame
-    label.Size = UDim2.new(0.4, 0, 1, 0)
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Input"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local inputFrame = Instance.new("Frame")
-    inputFrame.Parent = frame
-    inputFrame.Size = UDim2.new(0.55, 0, 0, 25)
-    inputFrame.Position = UDim2.new(1, -10, 0.5, 0)
-    inputFrame.AnchorPoint = Vector2.new(1, 0.5)
-    inputFrame.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
-    CreateCorner(inputFrame, UDim.new(0, 6))
-
-    local textBox = Instance.new("TextBox")
-    textBox.Parent = inputFrame
-    textBox.Size = UDim2.new(1, -10, 1, 0)
-    textBox.Position = UDim2.new(0, 5, 0, 0)
-    textBox.BackgroundTransparency = 1
-    textBox.Text = config.Default or ""
-    textBox.PlaceholderText = config.Placeholder or "Enter..."
-    textBox.TextColor3 = USHINOU.Theme.Text
-    textBox.PlaceholderColor3 = USHINOU.Theme.SubText
-    textBox.Font = Enum.Font.GothamBold
-    textBox.TextSize = 11
-
-    local callback = config.Callback or function() end
-    textBox.FocusLost:Connect(function(enter) if enter then callback(textBox.Text) end end)
-
-    return {
-        Get = function() return textBox.Text end,
-        Set = function(txt) textBox.Text = txt end,
-        Destroy = function() frame:Destroy() end
-    }
-end
-
-local function CreateButton(parent, config)
-    local btn = CreateButtonElement(parent, {Text = config.Text or "Button"})
-    local callback = config.Callback or function() end
-    btn.MouseButton1Click:Connect(function()
-        CreateTween(btn, "BackgroundColor3", USHINOU.Theme.Accent, 0.1)
-        task.wait(0.1)
-        CreateTween(btn, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
-        callback()
+local function CreateTextBox(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 35)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(0.4, 0, 1, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Input"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local InputFrame = Instance.new("Frame")
+    InputFrame.Parent = Frame
+    InputFrame.Size = UDim2.new(0.55, 0, 0, 25)
+    InputFrame.Position = UDim2.new(1, -10, 0.5, 0)
+    InputFrame.AnchorPoint = Vector2.new(1, 0.5)
+    InputFrame.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+    CreateCorner(InputFrame, UDim.new(0, 6))
+    local TextBox = Instance.new("TextBox")
+    TextBox.Parent = InputFrame
+    TextBox.Size = UDim2.new(1, -10, 1, 0)
+    TextBox.Position = UDim2.new(0, 5, 0, 0)
+    TextBox.BackgroundTransparency = 1
+    TextBox.Text = Config.Default or ""
+    TextBox.PlaceholderText = Config.Placeholder or "Enter..."
+    TextBox.TextColor3 = USHINOU.Theme.Text
+    TextBox.PlaceholderColor3 = USHINOU.Theme.SubText
+    TextBox.Font = Enum.Font.GothamBold
+    TextBox.TextSize = 11
+    TextBox.ClearTextOnFocus = Config.ClearOnFocus or false
+    local Callback = Config.Callback or function() end
+    TextBox.FocusLost:Connect(function(EnterPressed)
+        if EnterPressed then
+            Callback(TextBox.Text)
+        end
     end)
     return {
-        Destroy = function() btn:Destroy() end
+        Frame = Frame,
+        Get = function() return TextBox.Text end,
+        Set = function(Text) TextBox.Text = Text end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateLabel(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 25)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    frame.BackgroundTransparency = 0.5
-    CreateCorner(frame)
-
-    local lbl = Instance.new("TextLabel")
-    lbl.Parent = frame
-    lbl.Size = UDim2.new(1, -20, 1, 0)
-    lbl.Position = UDim2.new(0, 10, 0, 0)
-    lbl.BackgroundTransparency = 1
-    lbl.Text = config.Text or "Label"
-    lbl.TextColor3 = config.Color or USHINOU.Theme.Text
-    lbl.Font = Enum.Font.GothamBold
-    lbl.TextSize = config.Size or 12
-    lbl.TextXAlignment = config.Alignment or Enum.TextXAlignment.Left
-
+local function CreateLabel(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 25)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    Frame.BackgroundTransparency = 0.5
+    CreateCorner(Frame)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(1, -20, 1, 0)
+    Label.Position = UDim2.new(0, 10, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Label"
+    Label.TextColor3 = Config.Color or USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = Config.Size or 12
+    Label.TextXAlignment = Config.Alignment or Enum.TextXAlignment.Left
     return {
-        Set = function(text) lbl.Text = text end,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Set = function(Text) Label.Text = Text end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateKeybind(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 35)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
+local function CreateButton(Parent, Config)
+    local Btn = CreateButtonElement(Parent, {
+        Text = Config.Text or "Button",
+        Size = Config.Size or UDim2.new(1, 0, 0, 35)
+    })
+    local Callback = Config.Callback or function() end
+    Btn.MouseButton1Click:Connect(function()
+        CreateTween(Btn, "BackgroundColor3", USHINOU.Theme.Accent, 0.1)
+        task.wait(0.1)
+        CreateTween(Btn, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
+        Callback()
+    end)
+    return {
+        Frame = Btn,
+        SetText = function(Text) Btn.Text = Text end,
+        Destroy = function() Btn:Destroy() end
+    }
+end
 
-    local label = Instance.new("TextLabel")
-    label.Parent = frame
-    label.Size = UDim2.new(1, -70, 1, 0)
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Keybind"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local keyButton = Instance.new("TextButton")
-    keyButton.Parent = frame
-    keyButton.Size = UDim2.new(0, 50, 0, 25)
-    keyButton.Position = UDim2.new(1, -10, 0.5, 0)
-    keyButton.AnchorPoint = Vector2.new(1, 0.5)
-    keyButton.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
-    keyButton.Text = config.Default or "None"
-    keyButton.TextColor3 = USHINOU.Theme.Accent
-    keyButton.Font = Enum.Font.GothamBold
-    keyButton.TextSize = 10
-    CreateCorner(keyButton, UDim.new(0, 4))
-
-    local listening = false
-    local currentKey = config.Default
-    local callback = config.Callback or function() end
-
-    keyButton.MouseButton1Click:Connect(function()
-        if listening then return end
-        listening = true
-        keyButton.Text = "..."
-        local conn
-        conn = UserInputService.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Keyboard then
-                currentKey = tostring(input.KeyCode):gsub("Enum.KeyCode.", "")
-                keyButton.Text = currentKey
-                callback(currentKey)
-                listening = false
-                conn:Disconnect()
+local function CreateKeybind(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 35)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(1, -70, 1, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Keybind"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local KeyButton = Instance.new("TextButton")
+    KeyButton.Parent = Frame
+    KeyButton.Size = UDim2.new(0, 50, 0, 25)
+    KeyButton.Position = UDim2.new(1, -10, 0.5, 0)
+    KeyButton.AnchorPoint = Vector2.new(1, 0.5)
+    KeyButton.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+    KeyButton.Text = Config.Default or "None"
+    KeyButton.TextColor3 = USHINOU.Theme.Accent
+    KeyButton.Font = Enum.Font.GothamBold
+    KeyButton.TextSize = 10
+    CreateCorner(KeyButton, UDim.new(0, 4))
+    local Listening = false
+    local CurrentKey = Config.Default
+    local Callback = Config.Callback or function() end
+    KeyButton.MouseButton1Click:Connect(function()
+        if Listening then return end
+        Listening = true
+        KeyButton.Text = "..."
+        local Connection
+        Connection = UserInputService.InputBegan:Connect(function(Input)
+            if Input.UserInputType == Enum.UserInputType.Keyboard then
+                CurrentKey = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+                KeyButton.Text = CurrentKey
+                Callback(CurrentKey)
+                Listening = false
+                Connection:Disconnect()
             end
         end)
     end)
-
-    if config.Default then
-        UserInputService.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Keyboard then
-                local key = tostring(input.KeyCode):gsub("Enum.KeyCode.", "")
-                if key == currentKey and not listening then
-                    callback(currentKey)
+    if Config.Default then
+        UserInputService.InputBegan:Connect(function(Input)
+            if Input.UserInputType == Enum.UserInputType.Keyboard then
+                local Key = tostring(Input.KeyCode):gsub("Enum.KeyCode.", "")
+                if Key == CurrentKey and not Listening then
+                    Callback(CurrentKey)
                 end
             end
         end)
     end
-
     return {
-        Set = function(key) currentKey = key keyButton.Text = key end,
-        Get = function() return currentKey end,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Set = function(Key) 
+            CurrentKey = Key 
+            KeyButton.Text = Key
+        end,
+        Get = function() return CurrentKey end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateColorPicker(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 35)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1)
-
-    local label = Instance.new("TextLabel")
-    label.Parent = frame
-    label.Size = UDim2.new(1, -50, 1, 0)
-    label.Position = UDim2.new(0, 15, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = config.Text or "Color"
-    label.TextColor3 = USHINOU.Theme.Text
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    local colorButton = Instance.new("TextButton")
-    colorButton.Parent = frame
-    colorButton.Size = UDim2.new(0, 30, 0, 25)
-    colorButton.Position = UDim2.new(1, -10, 0.5, 0)
-    colorButton.AnchorPoint = Vector2.new(1, 0.5)
-    colorButton.BackgroundColor3 = config.Default or Color3.fromRGB(255, 0, 0)
-    colorButton.Text = ""
-    CreateCorner(colorButton, UDim.new(0, 4))
-
-    local callback = config.Callback or function() end
-
-    colorButton.MouseButton1Click:Connect(function()
-        local r = math.random(0, 255)
-        local g = math.random(0, 255)
-        local b = math.random(0, 255)
-        local newColor = Color3.fromRGB(r, g, b)
-        colorButton.BackgroundColor3 = newColor
-        callback(newColor)
+local function CreateColorPicker(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 35)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1)
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Frame
+    Label.Size = UDim2.new(1, -50, 1, 0)
+    Label.Position = UDim2.new(0, 15, 0, 0)
+    Label.BackgroundTransparency = 1
+    Label.Text = Config.Text or "Color"
+    Label.TextColor3 = USHINOU.Theme.Text
+    Label.Font = Enum.Font.GothamBold
+    Label.TextSize = 11
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    local ColorButton = Instance.new("TextButton")
+    ColorButton.Parent = Frame
+    ColorButton.Size = UDim2.new(0, 30, 0, 25)
+    ColorButton.Position = UDim2.new(1, -10, 0.5, 0)
+    ColorButton.AnchorPoint = Vector2.new(1, 0.5)
+    ColorButton.BackgroundColor3 = Config.Default or Color3.fromRGB(255, 0, 0)
+    ColorButton.Text = ""
+    CreateCorner(ColorButton, UDim.new(0, 4))
+    local Callback = Config.Callback or function() end
+    ColorButton.MouseButton1Click:Connect(function()
+        local R = math.random(0, 255)
+        local G = math.random(0, 255)
+        local B = math.random(0, 255)
+        local NewColor = Color3.fromRGB(R, G, B)
+        ColorButton.BackgroundColor3 = NewColor
+        Callback(NewColor)
     end)
-
     return {
-        Set = function(color) colorButton.BackgroundColor3 = color end,
-        Get = function() return colorButton.BackgroundColor3 end,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Set = function(Color) ColorButton.BackgroundColor3 = Color end,
+        Get = function() return ColorButton.BackgroundColor3 end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateParagraph(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 50)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    frame.BackgroundTransparency = 0.3
-    CreateCorner(frame)
-
-    local title = Instance.new("TextLabel")
-    title.Parent = frame
-    title.Size = UDim2.new(1, -20, 0, 20)
-    title.Position = UDim2.new(0, 10, 0, 5)
-    title.BackgroundTransparency = 1
-    title.Text = config.Title or "Title"
-    title.TextColor3 = USHINOU.Theme.Accent
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 12
-    title.TextXAlignment = Enum.TextXAlignment.Left
-
-    local content = Instance.new("TextLabel")
-    content.Parent = frame
-    content.Size = UDim2.new(1, -20, 0, 25)
-    content.Position = UDim2.new(0, 10, 0, 25)
-    content.BackgroundTransparency = 1
-    content.Text = config.Content or "Content here..."
-    content.TextColor3 = USHINOU.Theme.Text
-    content.Font = Enum.Font.Gotham
-    content.TextSize = 10
-    content.TextXAlignment = Enum.TextXAlignment.Left
-    content.TextWrapped = true
-
+local function CreateParagraph(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 50)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    Frame.BackgroundTransparency = 0.3
+    CreateCorner(Frame)
+    local Title = Instance.new("TextLabel")
+    Title.Parent = Frame
+    Title.Size = UDim2.new(1, -20, 0, 20)
+    Title.Position = UDim2.new(0, 10, 0, 5)
+    Title.BackgroundTransparency = 1
+    Title.Text = Config.Title or "Title"
+    Title.TextColor3 = USHINOU.Theme.Accent
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 12
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    local Content = Instance.new("TextLabel")
+    Content.Parent = Frame
+    Content.Size = UDim2.new(1, -20, 0, 25)
+    Content.Position = UDim2.new(0, 10, 0, 25)
+    Content.BackgroundTransparency = 1
+    Content.Text = Config.Content or "Content here..."
+    Content.TextColor3 = USHINOU.Theme.Text
+    Content.Font = Enum.Font.Gotham
+    Content.TextSize = 10
+    Content.TextXAlignment = Enum.TextXAlignment.Left
+    Content.TextWrapped = true
     return {
-        SetTitle = function(text) title.Text = text end,
-        SetContent = function(text) content.Text = text end,
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        SetTitle = function(Text) Title.Text = Text end,
+        SetContent = function(Text) Content.Text = Text end,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
-local function CreateDiscordInvite(parent, config)
-    local frame = Instance.new("Frame")
-    frame.Parent = parent
-    frame.Size = UDim2.new(1, 0, 0, 80)
-    frame.BackgroundColor3 = USHINOU.Theme.Dark
-    CreateCorner(frame)
-    AddMovingBorder(frame, 1.5)
-
-    local logo = Instance.new("ImageLabel")
-    logo.Parent = frame
-    logo.Size = UDim2.new(0, 40, 0, 40)
-    logo.Position = UDim2.new(0, 10, 0, 10)
-    logo.BackgroundTransparency = 1
-    logo.Image = config.Logo or ""
-    CreateCorner(logo, UDim.new(0, 8))
-
-    local title = Instance.new("TextLabel")
-    title.Parent = frame
-    title.Size = UDim2.new(1, -70, 0, 20)
-    title.Position = UDim2.new(0, 60, 0, 10)
-    title.BackgroundTransparency = 1
-    title.Text = config.Title or "Discord"
-    title.TextColor3 = USHINOU.Theme.Text
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 14
-    title.TextXAlignment = Enum.TextXAlignment.Left
-
-    local desc = Instance.new("TextLabel")
-    desc.Parent = frame
-    desc.Size = UDim2.new(1, -70, 0, 15)
-    desc.Position = UDim2.new(0, 60, 0, 30)
-    desc.BackgroundTransparency = 1
-    desc.Text = config.Description or "Join our server!"
-    desc.TextColor3 = USHINOU.Theme.SubText
-    desc.Font = Enum.Font.Gotham
-    desc.TextSize = 10
-    desc.TextXAlignment = Enum.TextXAlignment.Left
-
-    local joinBtn = Instance.new("TextButton")
-    joinBtn.Parent = frame
-    joinBtn.Size = UDim2.new(1, -20, 0, 25)
-    joinBtn.Position = UDim2.new(0.5, 0, 1, -10)
-    joinBtn.AnchorPoint = Vector2.new(0.5, 1)
-    joinBtn.BackgroundColor3 = USHINOU.Theme.Accent
-    joinBtn.Text = "Copy Invite"
-    joinBtn.TextColor3 = Color3.new(1, 1, 1)
-    joinBtn.Font = Enum.Font.GothamBold
-    joinBtn.TextSize = 12
-    CreateCorner(joinBtn, UDim.new(0, 6))
-
-    local invite = config.Invite or ""
-    joinBtn.MouseButton1Click:Connect(function()
-        setclipboard(invite)
-        joinBtn.Text = "Copied!"
+local function CreateDiscordInvite(Parent, Config)
+    local Frame = Instance.new("Frame")
+    Frame.Parent = Parent
+    Frame.Size = UDim2.new(1, 0, 0, 80)
+    Frame.BackgroundColor3 = USHINOU.Theme.Dark
+    CreateCorner(Frame)
+    AddMovingBorder(Frame, 1.5)
+    local Logo = Instance.new("ImageLabel")
+    Logo.Parent = Frame
+    Logo.Size = UDim2.new(0, 40, 0, 40)
+    Logo.Position = UDim2.new(0, 10, 0, 10)
+    Logo.BackgroundTransparency = 1
+    Logo.Image = Config.Logo or ""
+    CreateCorner(Logo, UDim.new(0, 8))
+    local Title = Instance.new("TextLabel")
+    Title.Parent = Frame
+    Title.Size = UDim2.new(1, -70, 0, 20)
+    Title.Position = UDim2.new(0, 60, 0, 10)
+    Title.BackgroundTransparency = 1
+    Title.Text = Config.Title or "Discord"
+    Title.TextColor3 = USHINOU.Theme.Text
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 14
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    local Desc = Instance.new("TextLabel")
+    Desc.Parent = Frame
+    Desc.Size = UDim2.new(1, -70, 0, 15)
+    Desc.Position = UDim2.new(0, 60, 0, 30)
+    Desc.BackgroundTransparency = 1
+    Desc.Text = Config.Description or "Join our server!"
+    Desc.TextColor3 = USHINOU.Theme.SubText
+    Desc.Font = Enum.Font.Gotham
+    Desc.TextSize = 10
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    local JoinBtn = Instance.new("TextButton")
+    JoinBtn.Parent = Frame
+    JoinBtn.Size = UDim2.new(1, -20, 0, 25)
+    JoinBtn.Position = UDim2.new(0.5, 0, 1, -10)
+    JoinBtn.AnchorPoint = Vector2.new(0.5, 1)
+    JoinBtn.BackgroundColor3 = USHINOU.Theme.Accent
+    JoinBtn.Text = "Copy Invite"
+    JoinBtn.TextColor3 = Color3.new(1, 1, 1)
+    JoinBtn.Font = Enum.Font.GothamBold
+    JoinBtn.TextSize = 12
+    CreateCorner(JoinBtn, UDim.new(0, 6))
+    local Invite = Config.Invite or ""
+    JoinBtn.MouseButton1Click:Connect(function()
+        setclipboard(Invite)
+        JoinBtn.Text = "Copied!"
         task.wait(2)
-        joinBtn.Text = "Copy Invite"
+        JoinBtn.Text = "Copy Invite"
     end)
-
     return {
-        Destroy = function() frame:Destroy() end
+        Frame = Frame,
+        Destroy = function() Frame:Destroy() end
     }
 end
 
 function USHINOU:MakeWindow(Config)
     local Title = Config.Title or "USHINOU HUB"
     local SubTitle = Config.SubTitle or "by KING_AURA163"
-    local Size = Config.Size or UDim2.new(0, 550, 0, 350)
+    local Size = Config.Size or UDim2.new(0, 500, 0, 300)
     local Icon = Config.Icon or "rbxassetid://96742928337118"
 
     local ScreenGui = Instance.new("ScreenGui")
@@ -711,6 +836,7 @@ function USHINOU:MakeWindow(Config)
     ScreenGui.ResetOnSpawn = false
     ScreenGui.DisplayOrder = 999
 
+    -- Loading Screen
     local LoadScreenGui = Instance.new("ScreenGui")
     LoadScreenGui.Name = "LoadScreen"
     LoadScreenGui.Parent = CoreGui
@@ -761,6 +887,7 @@ function USHINOU:MakeWindow(Config)
     sound.Volume = 1
     sound.Parent = LoadScreenGui
 
+    -- Animations for loading
     TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
     TweenService:Create(sunRays, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
     TweenService:Create(glow, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.2}):Play()
@@ -771,29 +898,23 @@ function USHINOU:MakeWindow(Config)
     TweenService:Create(sunRays, TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = 360}):Play()
     TweenService:Create(glow, TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = -360}):Play()
 
-    task.wait(5)
-
-    TweenService:Create(sunRays, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-    TweenService:Create(glow, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-    TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-
-    task.wait(0.8)
-    sound:Stop()
-    LoadScreenGui:Destroy()
-
+    -- Main UI
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "Main"
     MainFrame.Size = UDim2.new(0, 0, 0, 0)
     MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     MainFrame.BackgroundColor3 = USHINOU.Theme.Background
+    MainFrame.BorderSizePixel = 0
     MainFrame.ClipsDescendants = true
     MainFrame.Visible = false
     MainFrame.Parent = ScreenGui
     CreateCorner(MainFrame, UDim.new(0, 12))
-    AddMovingBorder(MainFrame, 2.5)
+    AddMovingBorder(MainFrame, 2.5, 100)
+    MakeDrag(MainFrame)
 
     local ToggleBtn = Instance.new("ImageButton")
+    ToggleBtn.Name = "ToggleButton"
     ToggleBtn.Size = UDim2.new(0, 60, 0, 60)
     ToggleBtn.Position = UDim2.new(0, 20, 0.5, -30)
     ToggleBtn.BackgroundColor3 = USHINOU.Theme.Background
@@ -804,36 +925,25 @@ function USHINOU:MakeWindow(Config)
     AddMovingBorder(ToggleBtn, 2)
     MakeDrag(ToggleBtn)
 
-    local Header = Instance.new("Frame")
-    Header.Size = UDim2.new(1, 0, 0, 50)
-    Header.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    Header.BackgroundTransparency = 0.2
-    Header.Parent = MainFrame
+    local TopBar = Instance.new("Frame")
+    TopBar.Name = "TopBar"
+    TopBar.Size = UDim2.new(1, 0, 0, 50)
+    TopBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    TopBar.BackgroundTransparency = 1
+    TopBar.Parent = MainFrame
 
-    local HeaderStroke = Instance.new("UIStroke")
-    HeaderStroke.Parent = Header
-    HeaderStroke.Thickness = 1.5
-    HeaderStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    local HeaderGradient = Instance.new("UIGradient")
-    HeaderGradient.Parent = HeaderStroke
-    HeaderGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(100,0,0)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255,0,0)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(100,0,0))
-    })
-    local headerRot = 0
-    RunService.RenderStepped:Connect(function(d) headerRot = headerRot + d*100 if headerRot >= 360 then headerRot = 0 end HeaderGradient.Rotation = headerRot end)
-
-    local ProfileImage = Instance.new("ImageLabel")
-    ProfileImage.Size = UDim2.new(0, 36, 0, 36)
-    ProfileImage.Position = UDim2.new(0, 10, 0.5, -18)
-    ProfileImage.BackgroundTransparency = 0.3
-    ProfileImage.Image = Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
-    ProfileImage.Parent = Header
-    CreateCorner(ProfileImage, UDim.new(1, 0))
+    local ProfileImg = Instance.new("ImageLabel")
+    ProfileImg.Size = UDim2.new(0, 36, 0, 36)
+    ProfileImg.Position = UDim2.new(0, 10, 0.5, -18)
+    ProfileImg.AnchorPoint = Vector2.new(0, 0.5)
+    ProfileImg.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
+    ProfileImg.Image = Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+    ProfileImg.ImageTransparency = 1
+    ProfileImg.Parent = TopBar
+    CreateCorner(ProfileImg, UDim.new(1, 0))
 
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(0, 200, 0, 18)
+    TitleLabel.Size = UDim2.new(0, 200, 0, 20)
     TitleLabel.Position = UDim2.new(0, 54, 0, 6)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = Title
@@ -841,88 +951,56 @@ function USHINOU:MakeWindow(Config)
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextSize = 14
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    TitleLabel.Parent = Header
+    TitleLabel.TextTransparency = 1
+    TitleLabel.Parent = TopBar
 
-    local PlayerNameLabel = Instance.new("TextLabel")
-    PlayerNameLabel.Size = UDim2.new(0, 200, 0, 14)
-    PlayerNameLabel.Position = UDim2.new(0, 54, 0, 26)
-    PlayerNameLabel.BackgroundTransparency = 1
-    PlayerNameLabel.Text = Player.Name
-    PlayerNameLabel.TextColor3 = Color3.fromRGB(255, 200, 100)
-    PlayerNameLabel.Font = Enum.Font.GothamBold
-    PlayerNameLabel.TextSize = 10
-    PlayerNameLabel.TextXAlignment = Enum.TextXAlignment.Left
-    PlayerNameLabel.Parent = Header
-
-    local TimerBox = Instance.new("Frame")
-    TimerBox.Size = UDim2.new(0, 75, 0, 30)
-    TimerBox.Position = UDim2.new(0.5, -85, 0.5, -15)
-    TimerBox.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
-    TimerBox.BackgroundTransparency = 0.3
-    TimerBox.Parent = Header
-    CreateCorner(TimerBox, UDim.new(0, 6))
-    AddMovingBorder(TimerBox, 1.2)
-
-    local TimerLabel = Instance.new("TextLabel")
-    TimerLabel.Size = UDim2.new(0, 40, 1, 0)
-    TimerLabel.Position = UDim2.new(0, 35, 0, 0)
-    TimerLabel.BackgroundTransparency = 1
-    TimerLabel.Text = "00:00"
-    TimerLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-    TimerLabel.Font = Enum.Font.GothamBold
-    TimerLabel.TextSize = 11
-    TimerLabel.Parent = TimerBox
-
-    local PlayerCountBox = Instance.new("Frame")
-    PlayerCountBox.Size = UDim2.new(0, 75, 0, 30)
-    PlayerCountBox.Position = UDim2.new(0.5, 5, 0.5, -15)
-    PlayerCountBox.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
-    PlayerCountBox.BackgroundTransparency = 0.3
-    PlayerCountBox.Parent = Header
-    CreateCorner(PlayerCountBox, UDim.new(0, 6))
-    AddMovingBorder(PlayerCountBox, 1.2)
-
-    local PlayerCountLabel = Instance.new("TextLabel")
-    PlayerCountLabel.Size = UDim2.new(0, 40, 1, 0)
-    PlayerCountLabel.Position = UDim2.new(0, 35, 0, 0)
-    PlayerCountLabel.BackgroundTransparency = 1
-    PlayerCountLabel.Text = "0/12"
-    PlayerCountLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
-    PlayerCountLabel.Font = Enum.Font.GothamBold
-    PlayerCountLabel.TextSize = 11
-    PlayerCountLabel.Parent = PlayerCountBox
+    local SubTitleLabel = Instance.new("TextLabel")
+    SubTitleLabel.Size = UDim2.new(0, 200, 0, 15)
+    SubTitleLabel.Position = UDim2.new(0, 54, 0, 26)
+    SubTitleLabel.BackgroundTransparency = 1
+    SubTitleLabel.Text = SubTitle
+    SubTitleLabel.TextColor3 = USHINOU.Theme.SubText
+    SubTitleLabel.Font = Enum.Font.GothamBold
+    SubTitleLabel.TextSize = 10
+    SubTitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    SubTitleLabel.TextTransparency = 1
+    SubTitleLabel.Parent = TopBar
 
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 28, 0, 28)
     CloseBtn.Position = UDim2.new(1, -40, 0.5, -14)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
+    CloseBtn.AnchorPoint = Vector2.new(1, 0.5)
+    CloseBtn.BackgroundColor3 = USHINOU.Theme.Dark
     CloseBtn.Text = "✕"
     CloseBtn.TextColor3 = USHINOU.Theme.Accent
     CloseBtn.Font = Enum.Font.GothamBold
     CloseBtn.TextSize = 14
-    CloseBtn.Parent = Header
+    CloseBtn.TextTransparency = 1
+    CloseBtn.Parent = TopBar
     CreateCorner(CloseBtn, UDim.new(0, 4))
-    AddMovingBorder(CloseBtn, 1)
 
     local MinimizeBtn = Instance.new("TextButton")
     MinimizeBtn.Size = UDim2.new(0, 28, 0, 28)
     MinimizeBtn.Position = UDim2.new(1, -75, 0.5, -14)
-    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(30, 0, 0)
+    MinimizeBtn.AnchorPoint = Vector2.new(1, 0.5)
+    MinimizeBtn.BackgroundColor3 = USHINOU.Theme.Dark
     MinimizeBtn.Text = "—"
     MinimizeBtn.TextColor3 = USHINOU.Theme.Accent
     MinimizeBtn.Font = Enum.Font.GothamBold
     MinimizeBtn.TextSize = 18
-    MinimizeBtn.Parent = Header
+    MinimizeBtn.TextTransparency = 1
+    MinimizeBtn.Parent = TopBar
     CreateCorner(MinimizeBtn, UDim.new(0, 4))
-    AddMovingBorder(MinimizeBtn, 1)
 
     local Sidebar = Instance.new("Frame")
+    Sidebar.Name = "Sidebar"
     Sidebar.Size = UDim2.new(0, 130, 1, -60)
     Sidebar.Position = UDim2.new(0, 10, 0, 60)
     Sidebar.BackgroundTransparency = 1
     Sidebar.Parent = MainFrame
 
     local TabScroll = Instance.new("ScrollingFrame")
+    TabScroll.Name = "TabScroll"
     TabScroll.Size = UDim2.new(1, 0, 1, 0)
     TabScroll.BackgroundTransparency = 1
     TabScroll.ScrollBarThickness = 2
@@ -935,12 +1013,14 @@ function USHINOU:MakeWindow(Config)
     TabLayout.Parent = TabScroll
 
     local ContentArea = Instance.new("Frame")
+    ContentArea.Name = "Content"
     ContentArea.Size = UDim2.new(1, -160, 1, -60)
     ContentArea.Position = UDim2.new(0, 150, 0, 60)
     ContentArea.BackgroundTransparency = 1
     ContentArea.Parent = MainFrame
 
     local ContentScroll = Instance.new("ScrollingFrame")
+    ContentScroll.Name = "ContentScroll"
     ContentScroll.Size = UDim2.new(1, 0, 1, 0)
     ContentScroll.BackgroundTransparency = 1
     ContentScroll.ScrollBarThickness = 4
@@ -959,106 +1039,203 @@ function USHINOU:MakeWindow(Config)
     Padding.PaddingRight = UDim.new(0, 5)
     Padding.Parent = ContentScroll
 
-    CreateParticles(MainFrame)
+    local Tabs = {}
+    local ActiveTab = nil
+    local Minimized = false
+    local Hidden = false
 
-    local BackgroundImage = Instance.new("ImageLabel")
-    BackgroundImage.Name = "AnimatedBG"
-    BackgroundImage.Parent = MainFrame
-    BackgroundImage.Size = UDim2.new(1.5, 0, 1.5, 0)
-    BackgroundImage.Position = UDim2.new(-0.25, 0, -0.25, 0)
-    BackgroundImage.BackgroundTransparency = 1
-    BackgroundImage.Image = "rbxassetid://95186427580023"
-    BackgroundImage.ImageColor3 = USHINOU.Theme.Accent
-    BackgroundImage.ImageTransparency = 0.7
-    BackgroundImage.ScaleType = Enum.ScaleType.Tile
-    BackgroundImage.TileSize = UDim2.new(0, 1024, 0, 1024)
-    BackgroundImage.ZIndex = 1
+    local function MinimizeWindow()
+        if Hidden then return end
+        MainFrame.Visible = not MainFrame.Visible
+    end
 
-    RunService.RenderStepped:Connect(function()
-        local t = tick()
-        local moveX = math.sin(t * 0.3) * 40
-        local moveY = math.cos(t * 0.3) * 40
-        local zoom = 1.5 + math.sin(t * 0.15) * 0.05
-        BackgroundImage.Position = UDim2.new(-0.25, moveX, -0.25, moveY)
-        BackgroundImage.Size = UDim2.new(zoom, 0, zoom, 0)
+    local function HideWindow()
+        if Hidden then return end
+        Hidden = true
+        CreateTween(MainFrame, "Size", UDim2.new(0, Size.X.Offset, 0, 50), 0.5, true)
+        CreateTween(MainFrame, "BackgroundTransparency", 1, 0.5)
+        task.wait(0.5)
+        MainFrame.Visible = false
+        Hidden = false
+    end
+
+    local function UnhideWindow()
+        MainFrame.Visible = true
+        CreateTween(MainFrame, "Size", Size, 0.5, true)
+        CreateTween(MainFrame, "BackgroundTransparency", 0, 0.5)
+    end
+
+    ToggleBtn.MouseButton1Click:Connect(function()
+        if MainFrame.Visible then
+            HideWindow()
+        else
+            UnhideWindow()
+        end
     end)
 
-    local ActiveTab = nil
+    CloseBtn.MouseButton1Click:Connect(function()
+        CreateTween(MainFrame, "Size", UDim2.new(0, 0, 0, 0), 0.5, true)
+        CreateTween(MainFrame, "BackgroundTransparency", 1, 0.5)
+        task.wait(0.5)
+        ScreenGui:Destroy()
+        LoadScreenGui:Destroy()
+    end)
 
-    local function CreateTab(name)
-        local button = Instance.new("TextButton")
-        button.Size = UDim2.new(1, -10, 0, 35)
-        button.Position = UDim2.new(0, 5, 0, 0)
-        button.BackgroundColor3 = USHINOU.Theme.Dark
-        button.Text = name
-        button.Font = Enum.Font.GothamBold
-        button.TextSize = 12
-        button.TextColor3 = USHINOU.Theme.InActiveTab
-        button.BackgroundTransparency = 1
-        button.TextTransparency = 1
-        button.Parent = TabScroll
-        CreateCorner(button)
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        if not Minimized then
+            CreateTween(MainFrame, "Size", UDim2.new(0, Size.X.Offset, 0, 50), 0.4, true)
+            Sidebar.Visible = false
+            ContentArea.Visible = false
+            MinimizeBtn.Text = "+"
+            Minimized = true
+        else
+            Sidebar.Visible = true
+            ContentArea.Visible = true
+            CreateTween(MainFrame, "Size", Size, 0.4, true)
+            MinimizeBtn.Text = "—"
+            Minimized = false
+        end
+    end)
 
-        local indicator = Instance.new("Frame")
-        indicator.Size = UDim2.new(0, 3, 0.6, 0)
-        indicator.Position = UDim2.new(0, 2, 0.2, 0)
-        indicator.BackgroundColor3 = USHINOU.Theme.Accent
-        indicator.BorderSizePixel = 0
-        indicator.Visible = false
-        indicator.Parent = button
-        CreateCorner(indicator, UDim.new(0.5, 0))
-
-        local tabStroke = AddMovingBorder(button, 1.2)
-        tabStroke.Enabled = false
-
-        local content = Instance.new("ScrollingFrame")
-        content.Size = UDim2.new(1, 0, 1, 0)
-        content.BackgroundTransparency = 1
-        content.ScrollBarThickness = 0
-        content.CanvasSize = UDim2.new()
-        content.Visible = false
-        content.Parent = ContentArea
-
-        local layout = Instance.new("UIListLayout")
-        layout.Padding = UDim.new(0, 6)
-        layout.Parent = content
-
-        local padding = Instance.new("UIPadding")
-        padding.PaddingTop = UDim.new(0, 5)
-        padding.PaddingBottom = UDim.new(0, 10)
-        padding.PaddingLeft = UDim.new(0, 5)
-        padding.PaddingRight = UDim.new(0, 5)
-        padding.Parent = content
-
-        local function activate()
-            if ActiveTab then
-                CreateTween(ActiveTab.button, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
-                ActiveTab.button.TextColor3 = USHINOU.Theme.InActiveTab
-                ActiveTab.indicator.Visible = false
-                ActiveTab.tabStroke.Enabled = false
-                ActiveTab.content.Visible = false
+    UserInputService.InputBegan:Connect(function(Input, Processed)
+        if not Processed and Input.KeyCode == Enum.KeyCode.RightShift then
+            if MainFrame.Visible then
+                HideWindow()
+            else
+                UnhideWindow()
             end
-            CreateTween(button, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.3)
-            button.TextColor3 = USHINOU.Theme.Accent
-            indicator.Visible = true
-            tabStroke.Enabled = true
-            content.Visible = true
-            ActiveTab = {button = button, indicator = indicator, content = content, tabStroke = tabStroke}
-            content.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
+        end
+    end)
+
+    -- Start Loading Animation then show Main UI
+    task.spawn(function()
+        task.wait(5)
+
+        TweenService:Create(sunRays, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
+        TweenService:Create(glow, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
+        TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
+
+        task.wait(0.8)
+        sound:Stop()
+        LoadScreenGui:Destroy()
+
+        -- Show Main Window with animation
+        MainFrame.Visible = true
+        CreateTween(MainFrame, "Size", Size, 0.7, true)
+        CreateTween(ToggleBtn, "ImageTransparency", 0, 0.5)
+        task.wait(0.3)
+        CreateTween(TopBar, "BackgroundTransparency", 0.2, 0.5)
+        CreateTween(TitleLabel, "TextTransparency", 0, 0.5)
+        task.wait(0.1)
+        CreateTween(SubTitleLabel, "TextTransparency", 0, 0.5)
+        task.wait(0.1)
+        CreateTween(CloseBtn, "TextTransparency", 0, 0.5)
+        CreateTween(MinimizeBtn, "TextTransparency", 0, 0.5)
+        CreateTween(ProfileImg, "ImageTransparency", 0, 0.5)
+    end)
+
+    local Window = {}
+
+    function Window:MakeTab(TabConfig)
+        local TabName = TabConfig.Name or "Tab"
+        local TabIcon = TabConfig.Icon
+
+        local TabBtn = Instance.new("TextButton")
+        TabBtn.Name = TabName
+        TabBtn.Size = UDim2.new(1, -10, 0, 35)
+        TabBtn.Position = UDim2.new(0, 5, 0, 0)
+        TabBtn.BackgroundColor3 = USHINOU.Theme.Dark
+        TabBtn.Text = TabName
+        TabBtn.Font = Enum.Font.GothamBold
+        TabBtn.TextSize = 12
+        TabBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
+        TabBtn.BackgroundTransparency = 1
+        TabBtn.TextTransparency = 1
+        TabBtn.Parent = TabScroll
+        CreateCorner(TabBtn)
+
+        if TabIcon then
+            local Icon = Instance.new("ImageLabel")
+            Icon.Size = UDim2.new(0, 16, 0, 16)
+            Icon.Position = UDim2.new(0, 8, 0.5, 0)
+            Icon.AnchorPoint = Vector2.new(0, 0.5)
+            Icon.BackgroundTransparency = 1
+            Icon.Image = TabIcon
+            Icon.ImageTransparency = 1
+            Icon.Parent = TabBtn
+            TabBtn.Text = "    " .. TabName
         end
 
-        button.MouseButton1Click:Connect(activate)
+        local Indicator = Instance.new("Frame")
+        Indicator.Size = UDim2.new(0, 3, 0.6, 0)
+        Indicator.Position = UDim2.new(0, 2, 0.2, 0)
+        Indicator.BackgroundColor3 = USHINOU.Theme.Accent
+        Indicator.BorderSizePixel = 0
+        Indicator.Visible = false
+        Indicator.Parent = TabBtn
+        CreateCorner(Indicator, UDim.new(0.5, 0))
+
+        local TabContent = Instance.new("ScrollingFrame")
+        TabContent.Name = TabName .. "Content"
+        TabContent.Size = UDim2.new(1, 0, 1, 0)
+        TabContent.BackgroundTransparency = 1
+        TabContent.ScrollBarThickness = 0
+        TabContent.CanvasSize = UDim2.new()
+        TabContent.Visible = false
+        TabContent.Parent = ContentArea
+
+        local TabContentLayout = Instance.new("UIListLayout")
+        TabContentLayout.Padding = UDim.new(0, 6)
+        TabContentLayout.Parent = TabContent
+
+        local TabPadding = Instance.new("UIPadding")
+        TabPadding.PaddingTop = UDim.new(0, 5)
+        TabPadding.PaddingBottom = UDim.new(0, 10)
+        TabPadding.PaddingLeft = UDim.new(0, 5)
+        TabPadding.PaddingRight = UDim.new(0, 5)
+        TabPadding.Parent = TabContent
+
+        local function Activate()
+            if ActiveTab then
+                CreateTween(ActiveTab.Btn, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
+                ActiveTab.Btn.TextColor3 = Color3.fromRGB(180, 180, 180)
+                ActiveTab.Indicator.Visible = false
+                ActiveTab.Content.Visible = false
+            end
+            CreateTween(TabBtn, "BackgroundColor3", Color3.fromRGB(60, 0, 0), 0.3)
+            TabBtn.TextColor3 = USHINOU.Theme.Accent
+            Indicator.Visible = true
+            TabContent.Visible = true
+            ActiveTab = {Btn = TabBtn, Indicator = Indicator, Content = TabContent}
+            TabContent.CanvasSize = UDim2.new(0, 0, 0, TabContentLayout.AbsoluteContentSize.Y + 20)
+        end
+
+        TabBtn.MouseButton1Click:Connect(Activate)
 
         if not ActiveTab then
             task.delay(0.8, function()
-                CreateTween(button, "BackgroundTransparency", 0, 0.3)
-                CreateTween(button, "TextTransparency", 0, 0.3)
-                activate()
+                CreateTween(TabBtn, "BackgroundTransparency", 0, 0.3)
+                CreateTween(TabBtn, "TextTransparency", 0, 0.3)
+                if TabIcon then
+                    for _, Child in ipairs(TabBtn:GetChildren()) do
+                        if Child:IsA("ImageLabel") then
+                            CreateTween(Child, "ImageTransparency", 0, 0.3)
+                        end
+                    end
+                end
+                Activate()
             end)
         else
             task.delay(0.8, function()
-                CreateTween(button, "BackgroundTransparency", 0.7, 0.3)
-                CreateTween(button, "TextTransparency", 0.2, 0.3)
+                CreateTween(TabBtn, "BackgroundTransparency", 0.7, 0.3)
+                CreateTween(TabBtn, "TextTransparency", 0.2, 0.3)
+                if TabIcon then
+                    for _, Child in ipairs(TabBtn:GetChildren()) do
+                        if Child:IsA("ImageLabel") then
+                            CreateTween(Child, "ImageTransparency", 0.2, 0.3)
+                        end
+                    end
+                end
             end)
         end
 
@@ -1066,57 +1243,51 @@ function USHINOU:MakeWindow(Config)
 
         local Tab = {}
 
-        function Tab:AddSection(text)
-            return CreateLabel(content, {Text = text, Size = 14, Color = USHINOU.Theme.Accent, Alignment = Enum.TextXAlignment.Center})
+        function Tab:AddSection(Text)
+            return CreateLabel(TabContent, {Text = Text, Size = 14, Color = USHINOU.Theme.Accent, Alignment = Enum.TextXAlignment.Center})
         end
 
-        function Tab:AddLabel(text)
-            return CreateLabel(content, {Text = text})
+        function Tab:AddLabel(Text)
+            return CreateLabel(TabContent, {Text = Text})
         end
 
-        function Tab:AddButton(config)
-            return CreateButton(content, config)
+        function Tab:AddButton(Config)
+            return CreateButton(TabContent, Config)
         end
 
-        function Tab:AddToggle(config)
-            return CreateToggle(content, config)
+        function Tab:AddToggle(Config)
+            return CreateToggle(TabContent, Config)
         end
 
-        function Tab:AddSlider(config)
-            return CreateSlider(content, config)
+        function Tab:AddSlider(Config)
+            return CreateSlider(TabContent, Config)
         end
 
-        function Tab:AddDropdown(config)
-            return CreateDropdown(content, config)
+        function Tab:AddDropdown(Config)
+            return CreateDropdown(TabContent, Config)
         end
 
-        function Tab:AddTextBox(config)
-            return CreateTextBox(content, config)
+        function Tab:AddTextBox(Config)
+            return CreateTextBox(TabContent, Config)
         end
 
-        function Tab:AddKeybind(config)
-            return CreateKeybind(content, config)
+        function Tab:AddKeybind(Config)
+            return CreateKeybind(TabContent, Config)
         end
 
-        function Tab:AddColorPicker(config)
-            return CreateColorPicker(content, config)
+        function Tab:AddColorPicker(Config)
+            return CreateColorPicker(TabContent, Config)
         end
 
-        function Tab:AddParagraph(config)
-            return CreateParagraph(content, config)
+        function Tab:AddParagraph(Config)
+            return CreateParagraph(TabContent, Config)
         end
 
-        function Tab:AddDiscordInvite(config)
-            return CreateDiscordInvite(content, config)
+        function Tab:AddDiscordInvite(Config)
+            return CreateDiscordInvite(TabContent, Config)
         end
 
         return Tab
-    end
-
-    local Window = {}
-
-    function Window:MakeTab(tabConfig)
-        return CreateTab(tabConfig.Name or "Tab")
     end
 
     function Window:Destroy()
@@ -1127,69 +1298,124 @@ function USHINOU:MakeWindow(Config)
     end
 
     function Window:Minimize()
-        MainFrame.Visible = not MainFrame.Visible
+        MinimizeWindow()
     end
 
-    MakeDrag(MainFrame, Header)
-
-    local isMinimized = false
-    MinimizeBtn.MouseButton1Click:Connect(function()
-        if not isMinimized then
-            CreateTween(MainFrame, "Size", UDim2.new(0, Size.X.Offset, 0, 50), 0.4, true)
-            Sidebar.Visible = false
-            ContentArea.Visible = false
-            MinimizeBtn.Text = "+"
-            isMinimized = true
-        else
-            Sidebar.Visible = true
-            ContentArea.Visible = true
-            CreateTween(MainFrame, "Size", Size, 0.4, true)
-            MinimizeBtn.Text = "—"
-            isMinimized = false
+    function Window:Dialog(Config)
+        local DialogFrame = Instance.new("Frame")
+        DialogFrame.Parent = ScreenGui
+        DialogFrame.Size = UDim2.new(0, 0, 0, 0)
+        DialogFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        DialogFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+        DialogFrame.BackgroundColor3 = USHINOU.Theme.Dark
+        DialogFrame.ZIndex = 100
+        CreateCorner(DialogFrame, UDim.new(0, 12))
+        AddMovingBorder(DialogFrame, 2)
+        local DTitle = Instance.new("TextLabel")
+        DTitle.Parent = DialogFrame
+        DTitle.Size = UDim2.new(1, 0, 0, 30)
+        DTitle.Position = UDim2.new(0, 0, 0, 10)
+        DTitle.BackgroundTransparency = 1
+        DTitle.Text = Config.Title or "Dialog"
+        DTitle.TextColor3 = USHINOU.Theme.Accent
+        DTitle.Font = Enum.Font.GothamBold
+        DTitle.TextSize = 16
+        local DText = Instance.new("TextLabel")
+        DText.Parent = DialogFrame
+        DText.Size = UDim2.new(1, -20, 0, 50)
+        DText.Position = UDim2.new(0, 10, 0, 45)
+        DText.BackgroundTransparency = 1
+        DText.Text = Config.Text or "Are you sure?"
+        DText.TextColor3 = USHINOU.Theme.Text
+        DText.Font = Enum.Font.Gotham
+        DText.TextSize = 12
+        DText.TextWrapped = true
+        local ButtonsFrame = Instance.new("Frame")
+        ButtonsFrame.Parent = DialogFrame
+        ButtonsFrame.Size = UDim2.new(1, 0, 0, 35)
+        ButtonsFrame.Position = UDim2.new(0, 0, 1, -10)
+        ButtonsFrame.AnchorPoint = Vector2.new(0, 1)
+        ButtonsFrame.BackgroundTransparency = 1
+        local ButtonsLayout = Instance.new("UIListLayout")
+        ButtonsLayout.Parent = ButtonsFrame
+        ButtonsLayout.FillDirection = Enum.FillDirection.Horizontal
+        ButtonsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        ButtonsLayout.Padding = UDim.new(0, 10)
+        local Options = Config.Options or {{"Yes", function() end}, {"No", function() end}}
+        for _, Option in ipairs(Options) do
+            local Btn = Instance.new("TextButton")
+            Btn.Parent = ButtonsFrame
+            Btn.Size = UDim2.new(0, 80, 0, 30)
+            Btn.BackgroundColor3 = USHINOU.Theme.Accent
+            Btn.Text = Option[1]
+            Btn.TextColor3 = Color3.new(1, 1, 1)
+            Btn.Font = Enum.Font.GothamBold
+            Btn.TextSize = 12
+            CreateCorner(Btn, UDim.new(0, 6))
+            Btn.MouseButton1Click:Connect(function()
+                if Option[2] then Option[2]() end
+                CreateTween(DialogFrame, "Size", UDim2.new(0, 0, 0, 0), 0.3, true)
+                task.wait(0.3)
+                DialogFrame:Destroy()
+            end)
         end
-    end)
-
-    CloseBtn.MouseButton1Click:Connect(function()
-        CreateTween(MainFrame, "Size", UDim2.new(0, 0, 0, 0), 0.5, true)
-        CreateTween(MainFrame, "BackgroundTransparency", 1, 0.5)
-        task.wait(0.5)
-        ScreenGui:Destroy()
-    end)
-
-    ToggleBtn.MouseButton1Click:Connect(function()
-        if MainFrame.Visible then
-            MainFrame.Visible = false
-        else
-            MainFrame.Visible = true
-            CreateTween(MainFrame, "Size", Size, 0.4, true)
-        end
-    end)
-
-    UserInputService.InputBegan:Connect(function(input, processed)
-        if not processed and input.KeyCode == Enum.KeyCode.RightShift then
-            if MainFrame.Visible then
-                MainFrame.Visible = false
-            else
-                MainFrame.Visible = true
-                CreateTween(MainFrame, "Size", Size, 0.4, true)
+        CreateTween(DialogFrame, "Size", UDim2.new(0, 300, 0, 150), 0.5, true)
+        return {
+            Close = function() 
+                CreateTween(DialogFrame, "Size", UDim2.new(0, 0, 0, 0), 0.3, true)
+                task.wait(0.3)
+                DialogFrame:Destroy() 
             end
-        end
-    end)
+        }
+    end
 
-    task.spawn(function()
-        MainFrame.Visible = true
-        CreateTween(MainFrame, "Size", Size, 0.7, true)
-        CreateTween(ToggleBtn, "ImageTransparency", 0, 0.5)
-        task.wait(0.3)
-        CreateTween(Header, "BackgroundTransparency", 0.2, 0.5)
-        CreateTween(TitleLabel, "TextTransparency", 0, 0.5)
-        task.wait(0.1)
-        CreateTween(PlayerNameLabel, "TextTransparency", 0, 0.5)
-        task.wait(0.1)
-        CreateTween(CloseBtn, "TextTransparency", 0, 0.5)
-        CreateTween(MinimizeBtn, "TextTransparency", 0, 0.5)
-        CreateTween(ProfileImage, "ImageTransparency", 0, 0.5)
-    end)
+    function Window:Notify(Config)
+        local Notification = Instance.new("Frame")
+        Notification.Parent = ScreenGui
+        Notification.Size = UDim2.new(0, 0, 0, 80)
+        Notification.Position = UDim2.new(0.5, 0, 0.9, 0)
+        Notification.AnchorPoint = Vector2.new(0.5, 0.5)
+        Notification.BackgroundColor3 = USHINOU.Theme.Dark
+        Notification.BackgroundTransparency = 0.1
+        Notification.ZIndex = 200
+        CreateCorner(Notification, UDim.new(0, 10))
+        AddMovingBorder(Notification, 1.5)
+        local NTitle = Instance.new("TextLabel")
+        NTitle.Parent = Notification
+        NTitle.Size = UDim2.new(1, -20, 0, 25)
+        NTitle.Position = UDim2.new(0, 10, 0, 5)
+        NTitle.BackgroundTransparency = 1
+        NTitle.Text = Config.Title or "Notification"
+        NTitle.TextColor3 = USHINOU.Theme.Accent
+        NTitle.Font = Enum.Font.GothamBold
+        NTitle.TextSize = 14
+        local NContent = Instance.new("TextLabel")
+        NContent.Parent = Notification
+        NContent.Size = UDim2.new(1, -20, 0, 45)
+        NContent.Position = UDim2.new(0, 10, 0, 30)
+        NContent.BackgroundTransparency = 1
+        NContent.Text = Config.Content or "Content"
+        NContent.TextColor3 = USHINOU.Theme.Text
+        NContent.Font = Enum.Font.Gotham
+        NContent.TextSize = 11
+        NContent.TextWrapped = true
+        CreateTween(Notification, "Size", UDim2.new(0, 300, 0, 80), 0.7, true)
+        task.delay(Config.Duration or 3, function()
+            CreateTween(Notification, "Size", UDim2.new(0, 0, 0, 80), 0.5, true)
+            CreateTween(Notification, "BackgroundTransparency", 1, 0.5)
+            CreateTween(NTitle, "TextTransparency", 1, 0.5)
+            CreateTween(NContent, "TextTransparency", 1, 0.5)
+            task.wait(0.5)
+            Notification:Destroy()
+        end)
+        return {
+            Destroy = function()
+                CreateTween(Notification, "Size", UDim2.new(0, 0, 0, 80), 0.5, true)
+                task.wait(0.5)
+                Notification:Destroy()
+            end
+        }
+    end
 
     return Window
 end

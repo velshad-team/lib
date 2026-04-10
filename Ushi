@@ -993,7 +993,7 @@ function USHINOU:MakeWindow(Config)
         button.Text = name
         button.Font = Enum.Font.GothamBold
         button.TextSize = 12
-        button.TextColor3 = Color3.fromRGB(180, 180, 180)
+        button.TextColor3 = USHINOU.Theme.InActiveTab
         button.BackgroundTransparency = 1
         button.TextTransparency = 1
         button.Parent = TabScroll
@@ -1033,7 +1033,7 @@ function USHINOU:MakeWindow(Config)
         local function activate()
             if ActiveTab then
                 CreateTween(ActiveTab.button, "BackgroundColor3", USHINOU.Theme.Dark, 0.3)
-                ActiveTab.button.TextColor3 = Color3.fromRGB(180, 180, 180)
+                ActiveTab.button.TextColor3 = USHINOU.Theme.InActiveTab
                 ActiveTab.indicator.Visible = false
                 ActiveTab.tabStroke.Enabled = false
                 ActiveTab.content.Visible = false

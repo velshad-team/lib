@@ -836,6 +836,7 @@ function USHINOU:MakeWindow(Config)
     ScreenGui.ResetOnSpawn = false
     ScreenGui.DisplayOrder = 999
 
+    -- Loading Screen
     local LoadScreenGui = Instance.new("ScreenGui")
     LoadScreenGui.Name = "LoadScreen"
     LoadScreenGui.Parent = CoreGui
@@ -886,6 +887,7 @@ function USHINOU:MakeWindow(Config)
     sound.Volume = 1
     sound.Parent = LoadScreenGui
 
+    -- Animations for loading
     TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
     TweenService:Create(sunRays, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
     TweenService:Create(glow, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.2}):Play()
@@ -896,16 +898,7 @@ function USHINOU:MakeWindow(Config)
     TweenService:Create(sunRays, TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = 360}):Play()
     TweenService:Create(glow, TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = -360}):Play()
 
-    task.wait(5)
-
-    TweenService:Create(sunRays, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-    TweenService:Create(glow, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-    TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {ImageTransparency = 1}):Play()
-
-    task.wait(0.8)
-    sound:Stop()
-    LoadScreenGui:Destroy()
-
+    -- Main UI
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "Main"
     MainFrame.Size = UDim2.new(0, 0, 0, 0)
@@ -1046,30 +1039,6 @@ function USHINOU:MakeWindow(Config)
     Padding.PaddingRight = UDim.new(0, 5)
     Padding.Parent = ContentScroll
 
-    CreateParticles(MainFrame)
-
-    local BackgroundImage = Instance.new("ImageLabel")
-    BackgroundImage.Name = "AnimatedBG"
-    BackgroundImage.Parent = MainFrame
-    BackgroundImage.Size = UDim2.new(1.5, 0, 1.5, 0)
-    BackgroundImage.Position = UDim2.new(-0.25, 0, -0.25, 0)
-    BackgroundImage.BackgroundTransparency = 1
-    BackgroundImage.Image = "rbxassetid://95186427580023"
-    BackgroundImage.ImageColor3 = USHINOU.Theme.Accent
-    BackgroundImage.ImageTransparency = 0.7
-    BackgroundImage.ScaleType = Enum.ScaleType.Tile
-    BackgroundImage.TileSize = UDim2.new(0, 1024, 0, 1024)
-    BackgroundImage.ZIndex = 1
-
-    RunService.RenderStepped:Connect(function()
-        local t = tick()
-        local moveX = math.sin(t * 0.3) * 40
-        local moveY = math.cos(t * 0.3) * 40
-        local zoom = 1.5 + math.sin(t * 0.15) * 0.05
-        BackgroundImage.Position = UDim2.new(-0.25, moveX, -0.25, moveY)
-        BackgroundImage.Size = UDim2.new(zoom, 0, zoom, 0)
-    end)
-
     local Tabs = {}
     local ActiveTab = nil
     local Minimized = false
@@ -1138,6 +1107,7 @@ function USHINOU:MakeWindow(Config)
         end
     end)
 
+    -- Start Loading Animation then show Main UI
     task.spawn(function()
         task.wait(5)
 
@@ -1149,6 +1119,7 @@ function USHINOU:MakeWindow(Config)
         sound:Stop()
         LoadScreenGui:Destroy()
 
+        -- Show Main Window with animation
         MainFrame.Visible = true
         CreateTween(MainFrame, "Size", Size, 0.7, true)
         CreateTween(ToggleBtn, "ImageTransparency", 0, 0.5)

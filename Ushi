@@ -2,11 +2,9 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 
 local Player = Players.LocalPlayer
-local Mouse = Player:GetMouse()
 
 local USHINOU = {
     Theme = {
@@ -865,7 +863,6 @@ function USHINOU:MakeWindow(Config)
     ScreenGui.ResetOnSpawn = false
     ScreenGui.DisplayOrder = 999
 
-    -- Loading Screen
     local LoadScreenGui = Instance.new("ScreenGui")
     LoadScreenGui.Name = "LoadScreen"
     LoadScreenGui.Parent = CoreGui
@@ -1066,7 +1063,6 @@ function USHINOU:MakeWindow(Config)
     Padding.PaddingRight = UDim.new(0, 5)
     Padding.Parent = ContentScroll
 
-    local Tabs = {}
     local ActiveTab = nil
     local Minimized = false
     local Hidden = false

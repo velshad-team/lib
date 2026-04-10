@@ -2,9 +2,11 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 
 local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
 
 local USHINOU = {
     Theme = {
@@ -14,10 +16,7 @@ local USHINOU = {
         SubText = Color3.fromRGB(200, 50, 50),
         Stroke = Color3.fromRGB(255, 80, 80),
         Dark = Color3.fromRGB(30, 0, 0),
-        Glow = Color3.fromRGB(255, 80, 80),
-        InActiveTab = Color3.fromRGB(180, 180, 180),
-        GlowRed = Color3.fromRGB(255, 80, 80),
-        GlowGold = Color3.fromRGB(255, 215, 0)
+        Glow = Color3.fromRGB(255, 80, 80)
     },
     Icons = {
         check = "rbxassetid://10709790644",
@@ -990,6 +989,66 @@ function USHINOU:MakeWindow(Config)
     SubTitleLabel.TextTransparency = 1
     SubTitleLabel.Parent = TopBar
 
+    local TimerBox = Instance.new("Frame")
+    TimerBox.Size = UDim2.new(0, 75, 0, 30)
+    TimerBox.Position = UDim2.new(0.5, -85, 0.5, -15)
+    TimerBox.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+    TimerBox.BackgroundTransparency = 0.3
+    TimerBox.Parent = TopBar
+    CreateCorner(TimerBox, UDim.new(0, 6))
+    AddMovingBorder(TimerBox, 1.2)
+
+    local TimerIcon = Instance.new("TextLabel")
+    TimerIcon.Size = UDim2.new(0, 28, 1, 0)
+    TimerIcon.Position = UDim2.new(0, 6, 0, 0)
+    TimerIcon.BackgroundTransparency = 1
+    TimerIcon.Text = "⏱️"
+    TimerIcon.TextColor3 = Color3.fromRGB(255, 100, 100)
+    TimerIcon.Font = Enum.Font.GothamBold
+    TimerIcon.TextSize = 14
+    TimerIcon.Parent = TimerBox
+
+    local TimerLabel = Instance.new("TextLabel")
+    TimerLabel.Size = UDim2.new(0, 40, 1, 0)
+    TimerLabel.Position = UDim2.new(0, 35, 0, 0)
+    TimerLabel.BackgroundTransparency = 1
+    TimerLabel.Text = "00:00"
+    TimerLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+    TimerLabel.Font = Enum.Font.GothamBold
+    TimerLabel.TextSize = 11
+    TimerLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TimerLabel.Parent = TimerBox
+
+    local PlayerCountBox = Instance.new("Frame")
+    PlayerCountBox.Size = UDim2.new(0, 75, 0, 30)
+    PlayerCountBox.Position = UDim2.new(0.5, 5, 0.5, -15)
+    PlayerCountBox.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+    PlayerCountBox.BackgroundTransparency = 0.3
+    PlayerCountBox.Parent = TopBar
+    CreateCorner(PlayerCountBox, UDim.new(0, 6))
+    AddMovingBorder(PlayerCountBox, 1.2)
+
+    local PlayerIcon = Instance.new("TextLabel")
+    PlayerIcon.Size = UDim2.new(0, 28, 1, 0)
+    PlayerIcon.Position = UDim2.new(0, 6, 0, 0)
+    PlayerIcon.BackgroundTransparency = 1
+    PlayerIcon.Text = "سيرفر"
+    PlayerIcon.TextColor3 = Color3.fromRGB(100, 200, 255)
+    PlayerIcon.Font = Enum.Font.GothamBold
+    PlayerIcon.TextSize = 14
+    PlayerIcon.Parent = PlayerCountBox
+
+    local PlayerCountLabel = Instance.new("TextLabel")
+    PlayerCountLabel.Size = UDim2.new(0, 40, 1, 0)
+    PlayerCountLabel.Position = UDim2.new(0, 35, 0, 0)
+    PlayerCountLabel.BackgroundTransparency = 1
+    PlayerCountLabel.Text = "0/12"
+    PlayerCountLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
+    PlayerCountLabel.Font = Enum.Font.GothamBold
+    PlayerCountLabel.TextSize = 11
+    PlayerCountLabel.TextXAlignment = Enum.TextXAlignment.Left
+    PlayerCountLabel.Parent = PlayerCountBox
+
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 28, 0, 28)
     CloseBtn.Position = UDim2.new(1, -40, 0.5, -14)
@@ -1063,6 +1122,7 @@ function USHINOU:MakeWindow(Config)
     Padding.PaddingRight = UDim.new(0, 5)
     Padding.Parent = ContentScroll
 
+    local Tabs = {}
     local ActiveTab = nil
     local Minimized = false
     local Hidden = false

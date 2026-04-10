@@ -16,7 +16,10 @@ local USHINOU = {
         SubText = Color3.fromRGB(200, 50, 50),
         Stroke = Color3.fromRGB(255, 80, 80),
         Dark = Color3.fromRGB(30, 0, 0),
-        Glow = Color3.fromRGB(255, 80, 80)
+        Glow = Color3.fromRGB(255, 80, 80),
+        InActiveTab = Color3.fromRGB(180, 180, 180),
+        GlowRed = Color3.fromRGB(255, 80, 80),
+        GlowGold = Color3.fromRGB(255, 215, 0)
     },
     Icons = {
         check = "rbxassetid://10709790644",
@@ -156,6 +159,10 @@ local USHINOU = {
         wifi = "rbxassetid://10747382504",
         wrench = "rbxassetid://10747383470",
         x = "rbxassetid://10747384394"
+    },
+    Assets = {
+        VoidID = "rbxassetid://95186427580023",
+        CustomImage = "rbxassetid://96742928337118"
     }
 }
 
@@ -216,6 +223,28 @@ local function CreateCorner(Parent, Radius)
     Corner.Parent = Parent
     Corner.CornerRadius = Radius or UDim.new(0, 8)
     return Corner
+end
+
+local function CreateParticles(mainFrame)
+    for i = 1, 15 do
+        local p = Instance.new("Frame")
+        p.Size = UDim2.new(0, 2, 0, 2)
+        p.BackgroundColor3 = USHINOU.Theme.Accent
+        p.BackgroundTransparency = 0.5
+        p.Position = UDim2.new(math.random(), 0, math.random(), 0)
+        p.Parent = mainFrame
+        p.ZIndex = 2
+        Instance.new("UICorner", p).CornerRadius = UDim.new(1, 0)
+        task.spawn(function()
+            while p.Parent do
+                local targetPos = UDim2.new(math.random(), 0, math.random(), 0)
+                local t = TweenService:Create(p, TweenInfo.new(math.random(5, 10), Enum.EasingStyle.Linear), {Position = targetPos, BackgroundTransparency = 0.8})
+                t:Play()
+                t.Completed:Wait()
+                p.BackgroundTransparency = 0.5
+            end
+        end)
+    end
 end
 
 local function CreateButtonElement(Parent, Config)
@@ -504,7 +533,7 @@ local function CreateDropdown(Parent, Config)
             CreateTween(Arrow, "Rotation", 90, 0.3)
             task.delay(0.3, function() OptionsFrame.Visible = false end)
         end
-    end)
+    end
     if Selected then SelectOption(Selected) end
     return {
         Frame = Frame,
@@ -828,7 +857,7 @@ function USHINOU:MakeWindow(Config)
     local Title = Config.Title or "USHINOU HUB"
     local SubTitle = Config.SubTitle or "by KING_AURA163"
     local Size = Config.Size or UDim2.new(0, 500, 0, 300)
-    local Icon = Config.Icon or "rbxassetid://96742928337118"
+    local Icon = Config.Icon or USHINOU.Assets.CustomImage
 
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "USHINOU_LIBRARY"
@@ -887,7 +916,6 @@ function USHINOU:MakeWindow(Config)
     sound.Volume = 1
     sound.Parent = LoadScreenGui
 
-    -- Animations for loading
     TweenService:Create(loadscreen, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
     TweenService:Create(sunRays, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
     TweenService:Create(glow, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0.2}):Play()
@@ -898,7 +926,6 @@ function USHINOU:MakeWindow(Config)
     TweenService:Create(sunRays, TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = 360}):Play()
     TweenService:Create(glow, TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true), {Rotation = -360}):Play()
 
-    -- Main UI
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "Main"
     MainFrame.Size = UDim2.new(0, 0, 0, 0)
@@ -1107,7 +1134,6 @@ function USHINOU:MakeWindow(Config)
         end
     end)
 
-    -- Start Loading Animation then show Main UI
     task.spawn(function()
         task.wait(5)
 
@@ -1119,7 +1145,6 @@ function USHINOU:MakeWindow(Config)
         sound:Stop()
         LoadScreenGui:Destroy()
 
-        -- Show Main Window with animation
         MainFrame.Visible = true
         CreateTween(MainFrame, "Size", Size, 0.7, true)
         CreateTween(ToggleBtn, "ImageTransparency", 0, 0.5)
@@ -1132,6 +1157,30 @@ function USHINOU:MakeWindow(Config)
         CreateTween(CloseBtn, "TextTransparency", 0, 0.5)
         CreateTween(MinimizeBtn, "TextTransparency", 0, 0.5)
         CreateTween(ProfileImg, "ImageTransparency", 0, 0.5)
+
+        CreateParticles(MainFrame)
+
+        local BackgroundImage = Instance.new("ImageLabel")
+        BackgroundImage.Name = "AnimatedBG"
+        BackgroundImage.Parent = MainFrame
+        BackgroundImage.Size = UDim2.new(1.5, 0, 1.5, 0)
+        BackgroundImage.Position = UDim2.new(-0.25, 0, -0.25, 0)
+        BackgroundImage.BackgroundTransparency = 1
+        BackgroundImage.Image = USHINOU.Assets.VoidID
+        BackgroundImage.ImageColor3 = USHINOU.Theme.Accent
+        BackgroundImage.ImageTransparency = 0.7
+        BackgroundImage.ZIndex = 1
+        BackgroundImage.ScaleType = Enum.ScaleType.Tile
+        BackgroundImage.TileSize = UDim2.new(0, 1024, 0, 1024)
+
+        RunService.RenderStepped:Connect(function()
+            local t = tick()
+            local moveX = math.sin(t * 0.3) * 40
+            local moveY = math.cos(t * 0.3) * 40
+            local zoom = 1.5 + math.sin(t * 0.15) * 0.05
+            BackgroundImage.Position = UDim2.new(-0.25, moveX, -0.25, moveY)
+            BackgroundImage.Size = UDim2.new(zoom, 0, zoom, 0)
+        end)
     end)
 
     local Window = {}
